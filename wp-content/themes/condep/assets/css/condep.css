@@ -1,0 +1,359 @@
+#topbar .search{
+    position: absolute;
+    top: 9px;
+    right: 25%;
+}
+#topbar .search form label{
+    display: none;
+}
+#topbar .search form input{
+    border-radius: 2px;
+}
+#topbar .search form input[type=text]{
+    border: 0px;    
+}
+#topbar .search form input[type=submit]{
+    border: 0px;
+    margin-left: -2px;
+    background-color: #FFF;
+    color: #999;
+}
+#topbar .search form input[type=submit]:hover{
+    background-color: #aaa;
+    color: #fff;
+}
+
+#topbar .social-links i{
+    transform: scale(1.2);
+}
+
+#hero h2, #hero p{
+    color: #FFF;
+    text-shadow: black 0.1em 0.1em 0.2em
+}
+#hero .carousel-control-prev-icon, #hero .carousel-control-next-icon{
+    margin-top: 3em;
+}
+
+#header .logo .logosbc {
+    margin-right: 5px;
+}
+
+#header .logo .logosbc img {
+    max-height: 45px;
+}
+
+#header .logo .logosbc img:hover {
+    transform: scale(1.1);
+}
+
+.logo span{
+    color: #999;
+    font-weight: 900;
+}
+.featured-services .icon-box{
+    width: 13em;
+    text-align: center;
+}
+.about h3{
+    text-align: center;
+}
+.about p{
+    text-align: justify;
+}
+
+.services .plus, .portfolio .plus, .team .plus{
+    position: relative;
+    width: 35px;
+    margin: 0 auto;
+}
+
+.services .plus a, .portfolio .plus a, .team .plus a{
+    font-size: 35px;  
+}
+
+.services .icon-box{
+    width: 100%;
+    margin-bottom: 25px;
+    height: 250px;
+    padding: 20px 10px;
+    border: 1px solid #ccc;
+}
+
+.services .icon-box .icon, .counts .box-registration{
+    border: 1px solid #ccc;
+}
+
+
+.portfolio .portfolio-item:hover{
+    box-shadow: 0px 0 5px 0 #999;
+}
+
+.portfolio .portfolio-item img{
+    width: 100%;
+}
+
+.portfolio .portfolio-info{
+    border: 2px solid #e2eefd;
+}
+
+.page.page-portfolio .section-title h2, .section-title h2,  .section-title h2 {
+    position: relative;
+    top: -32px;
+}
+
+ .member-info,  .member-info {
+    text-align: center;
+}
+
+ .img-management  {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    max-width: 250px;
+}
+
+.page.page-portfolio .portfolio-item.page-portfolio{
+    float: left;
+}
+
+.team .member{
+    width: 100%;
+    min-height: 330px;
+    padding: 20px;
+    box-shadow: 0;
+    border: 1px solid #ccc;
+}
+
+.team .member .member-img img{
+    display: block;
+    position: relative;    
+    margin: 0 auto;
+    height: 200px;   
+}
+
+.team .member .member-info{
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 235px;
+    text-align: center;
+    padding: 0px 20px 0px 20px;
+}
+
+.team .member .bloco1,.team .member .bloco2 {
+    width: 50%;
+    float: left;
+}
+
+.contact .info-box{
+    padding-left: 50px;
+    padding-right: 50px;
+    text-align: left;
+}
+
+.page{
+    min-height: 600px;
+}
+
+.page .page-title{
+    font-weight: 600;
+}
+
+.page.congrega .portfolio-info{
+    position: relative;
+    width: 300px;
+    margin-top: -30px !important;
+    float: right;
+}
+
+.page.congrega .portfolio-description{
+    width: 48em; 
+}
+
+.page.post .owl-carousel img{
+    position: relative;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.page table{
+    border-spacing: 0px;
+    width: 100%;    
+}
+
+.page table td{
+border: 1px solid #888;padding: 10px;
+vertical-align:top; 
+}
+
+.linkhistoricocongrega{
+    position:absolute;
+    bottom: 2px;
+}
+
+section.congrega{
+    padding: 10px 0;
+}
+
+.clients .logo{
+    margin-bottom: 50px;
+}
+
+.php-email-form{
+    margin-top: -40px !important;
+}
+
+.php-email-form textarea{
+    height: 200px !important;
+}
+
+.php-email-form .button-send{
+    color: #fff !important;
+}
+
+.counts .box-registration{
+    background-color: #fff;
+    margin-bottom: 3em;
+    height: 130px;
+}
+
+#footer .footer-top{
+    background-color: #f9f9f9;
+}
+
+.footer-top .logo img{
+    width: 50px;
+}
+
+.footer-top h2{
+    text-align: center;
+}
+
+#footer .footer-top .footer-contact h3, #footer .footer-top .footer-contact p{
+    text-align: center;
+}
+
+@media(min-width:900px){
+    #header .search{
+        display: none;
+    }
+}
+
+@media(max-width:900px){
+    .mobile-nav ul{
+        margin-top: 30px
+    }
+    .mobile-nav .search{
+        width: 17em; 
+        height: 30px;  
+        position: relative;   
+        margin: 0 auto; 
+        margin-top: 30px;      
+    }
+    .mobile-nav .search form label{
+        display: none;
+    }
+    .mobile-nav .search form input{
+        border-radius: 2px;
+    }
+    .mobile-nav .search form input[type=text]{
+        border: 1px solid #888;    
+    }
+    .mobile-nav .search form input[type=submit]{        
+        margin-left: -2px;
+        background-color: #888; 
+        color: #fff;
+        border: 1px solid #888;
+    }
+
+    .featured-services .icon-box{
+        width: 100%;
+    }
+    .counts .count-box{
+        margin-bottom: 30px;
+    }
+    .clients img{
+        max-width: 100%;
+        height: 100%;
+    }
+    .portfolio .portfolio-item img {
+        width: 100%;
+    }
+    .page .portfolio-description{
+        width: 100%; 
+    }
+    .page.congrega .portfolio-info{
+        width: 100%;
+        float: none;
+        margin-top: -80px !important;
+        margin-bottom: 50px;
+    }
+    .page.congrega .portfolio-description{
+        width: 100%;
+    }
+    ul.registration{
+        width: 100%;
+    }
+    .event img{
+        max-width: 60%;
+        max-height: 180px;
+    }
+    .footer-top .footer-contact,.footer-top .footer-links{
+        text-align: center;
+    }
+    .footer-top .menu1,.footer-top .menu2{
+        float: right;
+        width: 45%;        
+    }    
+}
+.error{
+    display: block;
+    width: 100%;
+    height: 500px;
+    padding-top: 200px;
+}
+
+/*--------------------------------------------------------------
+# ARCHIVE congrega
+--------------------------------------------------------------*/
+.quicksearch{
+    width: 103%;
+    margin-left: -15px;
+}
+
+.portfolio .portfolio-ul li{
+    border: 1px solid #ccc;
+}
+
+.grid-congrega{
+    border: 1px solid #aaa;
+    padding: 75px 25px 20px 25px;
+    margin-bottom: 40px;
+}
+
+.grid-congrega strong.title-cat{
+    position: absolute;
+    top:35px;left: 25px;
+}
+
+.grid-congrega .portfolio-item{
+    padding: 2px;margin: 0;
+    border: 1px solid #eee;
+    height: 30px;
+    width: 96%;
+    margin-bottom: 10px;
+}
+
+.grid-congrega .portfolio-item .col-congrega1{
+    padding: 0;margin: 0;
+    float: left;
+    border-right: 1px solid #eee;
+    padding-left: 10px;    
+}
+.grid-congrega .portfolio-item .col-congrega2{
+    padding: 0;margin: 0;
+    float: right;
+    padding-left: 40px;    
+}
