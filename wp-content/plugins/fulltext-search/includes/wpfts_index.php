@@ -1,7 +1,7 @@
 <?php
 
 /**  
- * Copyright 2013-2021 Epsiloncool
+ * Copyright 2013-2022 Epsiloncool
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
  *  It will keep me working further on this useful product.
  ******************************************************************************
  * 
- *  @copyright 2013-2021
+ *  @copyright 2013-2022
  *  @license GPLv3
  *  @package Wordpress Fulltext Search Pro
  *  @author Epsiloncool <info@e-wm.org>
@@ -79,10 +79,10 @@ class WPFTS_Index
 
 	protected function load_stops()
 	{	
-		global $wpdb;
+		global $wpfts_core;
 		
 		$q = 'select `word` from `'.$this->dbprefix().'stops`';
-		$res = $wpdb->get_result($q, ARRAY_A);
+		$res = $wpfts_core->db->get_result($q, ARRAY_A);
 		
 		$z = array();
 		foreach ($res as $d) {
@@ -91,7 +91,7 @@ class WPFTS_Index
 		$this->stops = $z;
 	}
 	
-	protected function log($message)
+	public function log($message)
 	{
 		$this->_log[] = $message;
 	}
@@ -119,7 +119,7 @@ class WPFTS_Index
 	
 	public function check_db_tables()
 	{
-		global $wpdb;
+		global $wpfts_core;
 		
 		$sch = $this->getDbScheme();
 		
@@ -127,13 +127,13 @@ class WPFTS_Index
 		$wrongs = array();
 		foreach ($sch as $k => $d) {
 			$q = 'SHOW TABLES LIKE "'.$this->dbprefix().$k.'"';
-			$res = $wpdb->get_results($q, ARRAY_A);
+			$res = $wpfts_core->db->get_results($q, ARRAY_A);
 			if (count($res) > 0) {
 				// Table exists
 				
 				// Check columns
 				$q = 'show columns from `'.$this->dbprefix().$k.'`';
-				$res = $wpdb->get_results($q, ARRAY_A);
+				$res = $wpfts_core->db->get_results($q, ARRAY_A);
 				
 				if (count($d['cols']) === count($res)) {
 					
@@ -175,7 +175,7 @@ class WPFTS_Index
 	
 	public function create_db_tables($only_listed = false) 
 	{
-		global $wpdb, $wpfts_core;
+		global $wpfts_core;
 		
 		$success = true;
 		
@@ -185,11 +185,11 @@ class WPFTS_Index
 			
 			if ((!is_array($only_listed)) || (is_array($only_listed) && in_array($k, $only_listed))) {
 				$q = 'drop table if exists `'.$this->dbprefix().$k.'`';
-				$wpdb->query($q);
+				$wpfts_core->db->query($q);
 			
-				$wpdb->query($d['create2']);
-				if ($wpdb->last_error) {
-					$this->log('Can\'t create table "'.$this->dbprefix().$k.'": '.$wpdb->last_error);
+				$wpfts_core->db->query($d['create2']);
+				if ($wpfts_core->db->get_last_error()) {
+					$this->log('Can\'t create table "'.$this->dbprefix().$k.'": '.$wpfts_core->db->get_last_error());
 					$success = false;
 				}
 			}
@@ -448,7 +448,7 @@ class WPFTS_Index
 			'qlog' => array(
 				'cols' => array(
 					'id' => array('int(11)', 'NO', 'PRI', null, 'auto_increment'),
-					'query' => array('longtext'),
+					'query' => array('longtext', 'YES_NULL'),
 					'n_results' => array('int(11)', 'NO', '', '0'),
 					'q_time' => array('float(10,6)', 'NO', '', '0'),
 					'insert_dt' => array('datetime', 'NO', '', '1970-01-01 00:00:00'),
@@ -595,7 +595,7 @@ class WPFTS_Index
 
 	public function reindex($index_id, $chunks, $is_force_flush = true)
 	{	
-		global $wpdb, $wpfts_context;
+		global $wpdb, $wpfts_context, $wpfts_core;
 		
 		if (!is_array($chunks)) {
 			$this->log(__('Reindex: wrong chunks format', 'fulltext-search'));
@@ -624,7 +624,7 @@ class WPFTS_Index
 					on `'.$pfx.'docs`.id = `'.$pfx.'vectors`.did
 				where 
 					`'.$pfx.'docs`.`index_id` = "'.addslashes($index_id).'"';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
 		$t1 = microtime(true);
 		$this->logtime('delete1 = '.sprintf('%.6f', $t1 - $t0));
@@ -639,14 +639,14 @@ class WPFTS_Index
 				where 
 					`index_id` = "'.addslashes($index_id).'" and 
 					`token` = "'.addslashes($k).'"';
-			$res = $wpdb->get_results($q, ARRAY_A);
+			$res = $wpfts_core->db->get_results($q, ARRAY_A);
 			
 			if (!isset($res[0]['id'])) {
 
 				$t0 = microtime(true);
 				
 				// Insert token record
-				$wpdb->insert($pfx.'docs', array(
+				$wpfts_core->db->insert($pfx.'docs', array(
 					'index_id' => $index_id,
 					'token' => $k,
 					'n' => 0,
@@ -709,7 +709,7 @@ class WPFTS_Index
 
 	public function _getTWCount($force = false)
 	{
-		global $wpdb;
+		global $wpfts_core;
 
 		// Let's count rows in t_words
 		// Only need to count one time (in the start of the PHP script)
@@ -717,7 +717,7 @@ class WPFTS_Index
 			$pfx = $this->dbprefix();
 
 			$q = 'select count(*) n from `'.$pfx.'tw`';
-			$rr = $wpdb->get_results($q, ARRAY_A);
+			$rr = $wpfts_core->db->get_results($q, ARRAY_A);
 	
 			$this->t_words_rows = $rr[0]['n'];
 
@@ -729,7 +729,7 @@ class WPFTS_Index
 
 	public function _getVCNotAct($max_n = 1)
 	{
-		global $wpdb;
+		global $wpfts_core;
 
 		$pfx = $this->dbprefix();
 
@@ -740,7 +740,7 @@ class WPFTS_Index
 				`act` = -1
 			limit '.intval($max_n).'
 		';
-		$rr = $wpdb->get_results($q, ARRAY_A);
+		$rr = $wpfts_core->db->get_results($q, ARRAY_A);
 
 		$a = array();
 		foreach ($rr as $row) {
@@ -752,7 +752,7 @@ class WPFTS_Index
 
 	public function indexWordData($wid)
 	{
-		global $wpdb;
+		global $wpdb, $wpfts_core;
 
 		$pfx = $this->dbprefix();
 
@@ -774,7 +774,7 @@ class WPFTS_Index
 				v.wid = '.intval($wid);
 
 		while (!$is_finished) {
-			$wpdb->query($q.' limit '.$c_off.','.$max_chunk);
+			$wpfts_core->db->query($q.' limit '.$c_off.','.$max_chunk);
 		
 			if (count($wpdb->last_result) > 0) {
 				foreach ($wpdb->last_result as $row3) {
@@ -798,14 +798,14 @@ class WPFTS_Index
 		}
 		
 		$q = 'delete from `'.$pfx.'vc` where `wid` = "'.addslashes($wid).'"';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
 		if (count($tt) <= 0) {
 			// It looks like this word do not used anymore
 			// @todo May be we need to remove this word
 
 			$q = 'update `'.$pfx.'words` set `act` = 0 where `id` = "'.addslashes($wid).'"';
-			$wpdb->query($q);
+			$wpfts_core->db->query($q);
 	
 			return true;
 		}
@@ -827,12 +827,12 @@ class WPFTS_Index
 				$pk = pack('l', $pk_size).$pk;
 
 				$q = 'insert into `'.$pfx.'vc` (`wid`,`upd_dt`,`vc`) values ("'.$wid.'", "'.date('Y-m-d H:i:s', $time).'", "'.$wpdb->_real_escape($pk).'")';
-				$wpdb->query($q);
+				$wpfts_core->db->query($q);
 
-				if (strlen($wpdb->last_error) < 1) {
+				if (strlen($wpfts_core->db->get_last_error()) < 1) {
 					$this->logtime('set from '.count($tt).' doc ids ('.$pk_size.','.strlen($pk).')');
 				} else {
-					$this->logtime('MySQL Error: '.$wpdb->last_error);
+					$this->logtime('MySQL Error: '.$wpfts_core->db->get_last_error());
 					return false;
 				}
 
@@ -846,18 +846,18 @@ class WPFTS_Index
 			$pk = pack('l', $pk_size).$pk;
 
 			$q = 'insert into `'.$pfx.'vc` (`wid`,`upd_dt`,`vc`) values ("'.$wid.'", "'.date('Y-m-d H:i:s', $time).'", "'.$wpdb->_real_escape($pk).'")';
-			$wpdb->query($q);
+			$wpfts_core->db->query($q);
 
-			if (strlen($wpdb->last_error) < 1) {
+			if (strlen($wpfts_core->db->get_last_error()) < 1) {
 				$this->logtime('set remaining from '.count($tt).' doc ids ('.$pk_size.','.strlen($pk).')');
 			} else {
-				$this->logtime('MySQL Error: '.$wpdb->last_error);
+				$this->logtime('MySQL Error: '.$wpfts_core->db->get_last_error());
 				return false;
 			}
 		}
 
 		$q = 'update `'.$pfx.'words` set `act` = '.count($tt).' where `id` = "'.addslashes($wid).'"';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
 		return true;
 	}
@@ -865,7 +865,7 @@ class WPFTS_Index
 	public function _flushTW()
 	{
 		// Let's FLUSH!
-		global $wpdb;
+		global $wpfts_core;
 
 		$pfx = $this->dbprefix();
 		
@@ -882,10 +882,10 @@ class WPFTS_Index
 			where 
 				isnull(w.id)
 			';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
 		$t1 = microtime(true);
-		$this->logtime('Insert new words only: '.$wpdb->last_error.', dt = '.sprintf('%.4f', $t1 - $t0));
+		$this->logtime('Insert new words only: '.$wpfts_core->db->get_last_error().', dt = '.sprintf('%.4f', $t1 - $t0));
 
 		$t0 = microtime(true);
 
@@ -900,10 +900,10 @@ class WPFTS_Index
 				STRAIGHT_JOIN `'.$pfx.'words` w
 					on tw.w = w.word
 		';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
 		$t1 = microtime(true);
-		$this->logtime('Insert vectors: '.$wpdb->last_error.', dt = '.sprintf('%.4f', $t1 - $t0));
+		$this->logtime('Insert vectors: '.$wpfts_core->db->get_last_error().', dt = '.sprintf('%.4f', $t1 - $t0));
 
 		// Touch all used words (right join is important here)
 		$t0 = microtime(true);
@@ -912,28 +912,28 @@ class WPFTS_Index
 				on tw.w = w.word
 			set `act` = -1 
 		';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
 		$t1 = microtime(true);
-		$this->logtime('Touch words: '.$wpdb->last_error.', dt = '.sprintf('%.4f', $t1 - $t0));
+		$this->logtime('Touch words: '.$wpfts_core->db->get_last_error().', dt = '.sprintf('%.4f', $t1 - $t0));
 
 		// Okay, clear the temp table
 		$t0 = microtime(true);
 
 		$q = 'CREATE TABLE `'.$pfx.'tw2` LIKE `'.$pfx.'tw`';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
 		$q = 'RENAME TABLE `'.$pfx.'tw` TO `'.$pfx.'tw0`, `'.$pfx.'tw2` TO `'.$pfx.'tw`';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
 		$q = 'DROP TABLE `'.$pfx.'tw0`';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
 		//$q = 'truncate table `'.$pfx.'tw`';
-		//$wpdb->query($q);
+		//$wpfts_core->db->query($q);
 
 		$t1 = microtime(true);
-		$this->logtime('Truncate table: '.$wpdb->last_error.', dt = '.sprintf('%.4f', $t1 - $t0));
+		$this->logtime('Truncate table: '.$wpfts_core->db->get_last_error().', dt = '.sprintf('%.4f', $t1 - $t0));
 
 		$this->t_words_rows = 0;
 	}
@@ -944,7 +944,7 @@ class WPFTS_Index
 		//ini_set('display_errors', 1);
 		//error_reporting(E_ALL);
 
-		global $wpdb;
+		global $wpfts_core;
 		
 		// Validate
 		if (!is_array($docs)) {
@@ -976,16 +976,16 @@ class WPFTS_Index
 
 /*
 		$q = 'create temporary table `t_words` (`w` varchar(255) not null, `wn` int(11) not null, key `w` (`w`))';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
-		$this->logtime('create temp table: '.$wpdb->last_error);
+		$this->logtime('create temp table: '.$wpfts_core->db->get_last_error());
 */
 /*
 		// Okay, clear the temp table
 		$q = 'truncate table `t_words`';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
-		$this->logtime('Initial truncate table: '.$wpdb->last_error);
+		$this->logtime('Initial truncate table: '.$wpfts_core->db->get_last_error());
 */
 
 		$wordlist = array();
@@ -1002,16 +1002,16 @@ class WPFTS_Index
 			$num_of_words = count($words);
 			$doclist[$id] = $num_of_words;
 
-			$wpdb->update($pfx.'docs', array('n' => $num_of_words), array('id' => $id));
+			$wpfts_core->db->update($pfx.'docs', array('n' => $num_of_words), array('id' => $id));
 
 			$this->logtime('break to words ('.$id.', '.count($wordlist).')');
 
 			// Remove old vectors for this doc_id
 			$q = 'delete from '.$pfx.'vectors
 					where `did` = "'.$id.'"';
-			$wpdb->query($q);
+			$wpfts_core->db->query($q);
 	
-			$this->logtime('Remove old vectors: '.$wpdb->last_error);
+			$this->logtime('Remove old vectors: '.$wpfts_core->db->get_last_error());
 		
 			$ws = array_chunk($words, 1000);
 
@@ -1024,9 +1024,9 @@ class WPFTS_Index
 				}
 	
 				$q = 'insert into `'.$pfx.'tw` (`w`, `did`, `wn`) values '.implode(',', $t);
-				$wpdb->query($q);
+				$wpfts_core->db->query($q);
 
-				$this->logtime('Insert word chunk ('.count($ws_chunk).'): '.$wpdb->last_error);
+				$this->logtime('Insert word chunk ('.count($ws_chunk).'): '.$wpfts_core->db->get_last_error());
 			}
 
 			$this->t_words_rows += $wn - 1;
@@ -1039,9 +1039,9 @@ class WPFTS_Index
 /*
 		// Delete temp table (just in case)
 		$q = 'drop temporary table `t_words`';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
-		$this->logtime('Drop temp table: '.$wpdb->last_error);
+		$this->logtime('Drop temp table: '.$wpfts_core->db->last_error);
 */
 
 		return true;
@@ -1258,7 +1258,7 @@ class WPFTS_Index
 					';
 				}
 				// Query for word data
-				$res1 = $wpdb->get_results($qr, ARRAY_A);				
+				$res1 = $wpfts_core->db->get_results($qr, ARRAY_A);				
 			
 				$this->logtime($qr." | ".'Totally found '.count($res1).' word and subwords. Taken memory: '.memory_get_usage());
 			
@@ -1321,7 +1321,7 @@ class WPFTS_Index
 							from `'.$pfx.'vectors` v
 							where 
 								v.wid in ('.implode(',', $n_ch).')';
-							$r6 = $wpdb->get_results($qr, ARRAY_A);
+							$r6 = $wpfts_core->db->get_results($qr, ARRAY_A);
 
 						$tt = array();
 						foreach ($r6 as $row6) {
@@ -1420,7 +1420,7 @@ class WPFTS_Index
 				if ($is_use_ttable) {
 					// Remove previous temporary table
 					$qr = 'drop temporary table if exists `'.$tname.'`';
-					$wpdb->query($qr);
+					$wpfts_core->db->query($qr);
 			
 					// Create temporary table
 					$qr = 'create temporary table `'.$tname.'` (
@@ -1428,7 +1428,7 @@ class WPFTS_Index
 								`pow` int(11) not null, 
 								`res` float(10,6) not null,
 								key `did` (`did`) )';
-					$wpdb->query($qr);
+					$wpfts_core->db->query($qr);
 
 					$calcd_ch = array_chunk($calcd, 1000, true);
 					foreach ($calcd_ch as $cc) {
@@ -1437,7 +1437,7 @@ class WPFTS_Index
 							$aa[] = '("'.$kk.'","'.$dd[1].'","'.$dd[0].'")';
 						}
 						$qr = 'insert into `'.$tname.'` (`did`,`pow`,`res`) values '.implode(',', $aa);
-						$wpdb->query($qr);
+						$wpfts_core->db->query($qr);
 					}
 			
 					$this->logtime('Fill temp table finished.');
@@ -1452,7 +1452,7 @@ class WPFTS_Index
 							$aa[] = '("'.$qlog_id.'","'.$kk.'","'.$dd[1].'","'.$dd[0].'")';
 						}
 						$qr = 'insert into `'.$tname.'` (`q_id`,`did`,`pow`,`res`) values '.implode(',', $aa);
-						$wpdb->query($qr);
+						$wpfts_core->db->query($qr);
 					}
 			
 					$this->logtime('Fill tp table finished.');
@@ -1464,7 +1464,7 @@ class WPFTS_Index
 					from `'.$tname.'` trel
 					straight_join `'.$pfx.'docs` tbase
 						on (trel.did = tbase.id)'.($is_use_ttable ? '' : ' and (trel.q_id = "'.addslashes($qlog_id).'")');
-				$r5 = $wpdb->get_results($qr, ARRAY_A);
+				$r5 = $wpfts_core->db->get_results($qr, ARRAY_A);
 
 				$this->logtime('Calculated max relevance...');
 
@@ -1645,12 +1645,12 @@ class WPFTS_Index
 	
 	function sql_posts_pre_query($posts, &$wpq)
 	{
-		global $wpdb;
+		global $wpdb, $wpfts_core;
 
 		// Implement query splitting algorithm with relevance preservation
 		if ((isset($wpq->wpftsi_session['token'])) && ($wpq->wpftsi_session['issearch'])) {
 			if ($wpq->wpftsi_session['is_split_query']) {
-				$post_idrev = $wpdb->get_results( $wpq->request );
+				$post_idrev = $wpfts_core->db->get_results( $wpq->request );
 
 				$this->wpq_set_found_posts($wpq, $wpq->query_vars, $wpq->wpftsi_session['limits'] );
 
@@ -1667,7 +1667,7 @@ class WPFTS_Index
 					}
 
 					$q = 'select * from `'.$wpdb->posts.'` where ID in ('.implode(',', array_keys($ids)).')';
-					$res2 = $wpdb->get_results($q);
+					$res2 = $wpfts_core->db->get_results($q);
 
 					// We have to reorder post to make the same order as ID list was before
 					usort($res2, function($v1, $v2) use (&$ords)
@@ -1702,7 +1702,7 @@ class WPFTS_Index
 	
 	function sql_the_posts($posts, &$wpq)
 	{ 
-		global $wpdb;
+		global $wpfts_core;
 
 		if (isset($wpq->wpftsi_session)) {
 			$sess = $wpq->wpftsi_session;
@@ -1715,7 +1715,7 @@ class WPFTS_Index
 					$pfx = $this->dbprefix();
 
 					$q = 'delete from `'.$pfx.'tp` where `q_id` = "'.addslashes($sess['q_id']).'"';
-					$wpdb->query($q);
+					$wpfts_core->db->query($q);
 				}
 			}
 
@@ -1747,7 +1747,8 @@ class WPFTS_Index
 	 */
 	function wpq_set_found_posts(&$wpq, $q, $limits)
 	{
-		global $wpdb;
+		global $wpfts_core;
+
 		// Bail if posts is an empty array. Continue if posts is an empty string,
 		// null, or false to accommodate caching plugins that fill posts later.
 		if ( $q['no_found_rows'] || ( is_array( $wpq->posts ) && ! $wpq->posts ) ) {
@@ -1763,7 +1764,7 @@ class WPFTS_Index
 			 * @param string   $found_posts The query to run to find the found posts.
 			 * @param WP_Query $wpq        The WP_Query instance (passed by reference).
 			 */
-			$wpq->found_posts = $wpdb->get_var( apply_filters_ref_array( 'found_posts_query', array( 'SELECT FOUND_ROWS()', &$wpq ) ) );
+			$wpq->found_posts = $wpfts_core->db->get_var( apply_filters_ref_array( 'found_posts_query', array( 'SELECT FOUND_ROWS()', &$wpq ) ) );
 		} else {
 			if ( is_array( $wpq->posts ) ) {
 				$wpq->found_posts = count( $wpq->posts );
@@ -1793,7 +1794,7 @@ class WPFTS_Index
 
 	function getRecordsToRebuild($n_max = 1)
 	{	
-		global $wpdb;
+		global $wpfts_core;
 		
 		$idx = $this->dbprefix();
 		
@@ -1808,14 +1809,14 @@ class WPFTS_Index
 				((locked_dt = "1970-01-01 00:00:00") or (locked_dt < "'.$time2.'"))
 			order by build_time asc, id asc 
 			limit '.intval($n_max).'';
-		$r = $wpdb->get_results($q, ARRAY_A);
+		$r = $wpfts_core->db->get_results($q, ARRAY_A);
 		
 		return $r;
 	}
 	
 	function checkAndSyncWPPosts($current_build_time)
 	{	
-		global $wpdb;
+		global $wpdb, $wpfts_core;
 		
 		$idx = $this->dbprefix();
 		
@@ -1827,7 +1828,7 @@ class WPFTS_Index
 					wi.force_rebuild = if(p.ID is null, 2, if ((wi.build_time = "'.addslashes($current_build_time).'") and (wi.tdt = p.post_modified), 0, 1))
 				where 
 					(wi.tsrc = "wp_posts") and (wi.force_rebuild = 0)';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 		
 		// Step 2. Find and add new posts // @todo need to be optimized!
 		$q = 'insert ignore into `'.$idx.'index` 
@@ -1841,7 +1842,7 @@ class WPFTS_Index
 					1 force_rebuild,
 					"1970-01-01 00:00:00" locked_dt
 				from `'.$wpdb->posts.'` p';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 		
 		// Step 3. What else?
 	}
@@ -1862,7 +1863,7 @@ class WPFTS_Index
 					sum(if ((force_rebuild = 0) and (build_time != 0), 1, 0)) n_actual
 				from `'.$idx.'index` 
 				where `tsrc` = "wp_posts"';
-			$res = $wpdb->get_results($q, ARRAY_A);
+			$res = $wpfts_core->db->get_results($q, ARRAY_A);
 			
 			$ret = array();
 			if (isset($res[0]['n_inindex'])) {
@@ -1888,7 +1889,7 @@ class WPFTS_Index
 	
 				// Check if we have any records in TW cache
 				$q = 'select count(*) n from `'.$idx.'tw`';
-				$rr = $wpdb->get_results($q, ARRAY_A);
+				$rr = $wpfts_core->db->get_results($q, ARRAY_A);
 		
 				$ret['n_tw'] = isset($rr[0]) ? intval($rr[0]['n']) : 0;
 		
@@ -1899,7 +1900,7 @@ class WPFTS_Index
 								sum(if(`act` = -1, 0, 1)) nw_act,
 								count(id) nw_total
 							from `'.$idx.'words`';
-						$res = $wpdb->get_results($q, ARRAY_A);
+						$res = $wpfts_core->db->get_results($q, ARRAY_A);
 	
 						$ret['nw_act'] = intval($res[0]['nw_act']);
 						$ret['nw_total'] = intval($res[0]['nw_total']);
@@ -1908,7 +1909,7 @@ class WPFTS_Index
 						$q = 'select 
 								count(id) nw_total
 							from `'.$idx.'words`';
-						$res = $wpdb->get_results($q, ARRAY_A);
+						$res = $wpfts_core->db->get_results($q, ARRAY_A);
 		
 						$ret['nw_act'] = intval($res[0]['nw_total']);
 						$ret['nw_total'] = intval($res[0]['nw_total']);
@@ -1934,14 +1935,14 @@ class WPFTS_Index
 	
 	function getClusters()
 	{	
-		global $wpdb;
+		global $wpfts_core;
 		
 		$idx = $this->dbprefix();
 		
 		$z = array('post_title' => 1, 'post_content' => 1);
 		
 		$q = 'select distinct `token` from `'.$idx.'docs` limit 100';
-		$res = $wpdb->get_results($q, ARRAY_A);
+		$res = $wpfts_core->db->get_results($q, ARRAY_A);
 		
 		$z = array();
 		foreach ($res as $d) {
@@ -1955,7 +1956,7 @@ class WPFTS_Index
 
 	function lockUnlockedRecord($id) {
 		
-		global $wpdb;
+		global $wpfts_core;
 		
 		$idx = $this->dbprefix();
 		
@@ -1964,7 +1965,7 @@ class WPFTS_Index
 		$new_time = date('Y-m-d H:i:s', $time);
 		
 		$q = 'select id, if((locked_dt = "1970-01-01 00:00:00") or (locked_dt < "'.$time2.'"), 0, 1) islocked from `'.$idx.'index` where id = "'.addslashes($id).'"';
-		$res = $wpdb->get_results($q, ARRAY_A);
+		$res = $wpfts_core->db->get_results($q, ARRAY_A);
 		
 		if (isset($res[0])) {
 			if ($res[0]['islocked']) {
@@ -1972,28 +1973,27 @@ class WPFTS_Index
 				return false;
 			} else {
 				// Lock it
-				$wpdb->update($idx.'index', array('locked_dt' => $new_time), array('id' => $id));
+				$wpfts_core->db->update($idx.'index', array('locked_dt' => $new_time), array('id' => $id));
 				return true;
 			}
 		} else {
 			// Record not found
 			return false;
 		}
-		
 	}
 	
 	function unlockRecord($id) {
 		
-		global $wpdb;
+		global $wpfts_core;
 		
 		$idx = $this->dbprefix();
 		
-		$wpdb->update($idx.'index', array('locked_dt' => '1970-01-01 00:00:00'), array('id' => $id));
+		$wpfts_core->db->update($idx.'index', array('locked_dt' => '1970-01-01 00:00:00'), array('id' => $id));
 	}
 	
 	function updateRecordData($id, $data = array()) {
 		
-		global $wpdb;
+		global $wpfts_core;
 		
 		$idx = $this->dbprefix();
 		
@@ -2003,12 +2003,12 @@ class WPFTS_Index
 				$a[$k] = $d;
 			}
 		}
-		$wpdb->update($idx.'index', $a, array('id' => $id));
+		$wpfts_core->db->update($idx.'index', $a, array('id' => $id));
 	}
 	
 	function insertRecordData($data = array()) {
 		
-		global $wpdb;
+		global $wpdb, $wpfts_core;
 		
 		$idx = $this->dbprefix();
 		
@@ -2018,21 +2018,21 @@ class WPFTS_Index
 				$a[$k] = $d;
 			}
 		}
-		$wpdb->insert($idx.'index', $a);
+		$wpfts_core->db->insert($idx.'index', $a);
 		
 		return $wpdb->insert_id;
 	}
 	
 	function updateIndexRecordForPost($post_id, $modt, $build_time, $time = false, $force_rebuild = 0) {
 		
-		global $wpdb;
+		global $wpfts_core;
 		
 		if ($time === false) {
 			$time = time();
 		}
 		
 		$q = 'select * from `'.$this->dbprefix().'index` where (`tid` = "'.$post_id.'") and (`tsrc` = "wp_posts")';
-		$res = $wpdb->get_results($q, ARRAY_A);
+		$res = $wpfts_core->db->get_results($q, ARRAY_A);
 		
 		if (isset($res[0])) {
 
@@ -2079,27 +2079,27 @@ class WPFTS_Index
 	
 	function removeIndexRecordForPost($post_id) {
 		
-		global $wpdb;
+		global $wpfts_core;
 		
 		$idx = $this->dbprefix();
 		
 		$q = 'select `id` from `'.$idx.'index` where (`tid` = "'.addslashes($post_id).'") and (`tsrc` = "wp_posts")';
-		$res_index = $wpdb->get_results($q, ARRAY_A);
+		$res_index = $wpfts_core->db->get_results($q, ARRAY_A);
 		
 		if (isset($res_index[0])) {
 			$q = 'select `id` from `'.$idx.'docs` where `index_id` in ('.implode(',', $this->getColumn($res_index, 'id')).')';
-			$res_docs = $wpdb->get_results($q, ARRAY_A);
+			$res_docs = $wpfts_core->db->get_results($q, ARRAY_A);
 			
 			if (isset($res_docs[0])) {
 				$q = 'delete from `'.$idx.'vectors` where `did` in ('.implode(',', $this->getColumn($res_docs, 'id')).')';
-				$wpdb->query($q);
+				$wpfts_core->db->query($q);
 				
 				$q = 'delete from `'.$idx.'docs` where `index_id` in ('.implode(',', $this->getColumn($res_index, 'id')).')';
-				$wpdb->query($q);
+				$wpfts_core->db->query($q);
 			}
 			
 			$q = 'delete from `'.$idx.'index` where (`tid` = "'.addslashes($post_id).'") and (`tsrc` = "wp_posts")';
-			$wpdb->query($q);
+			$wpfts_core->db->query($q);
 		}
 		
 		return true;

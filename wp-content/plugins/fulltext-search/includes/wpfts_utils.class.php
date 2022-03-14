@@ -7,7 +7,7 @@ class WPFTS_Utils
 {
 	public static function GetRawCache($object_id, $object_type, $mtime, $is_force_reindex, $cb)
 	{
-		global $wpdb, $wpfts_core;
+		global $wpfts_core;
 
 		if (!$wpfts_core) {
 			return array();
@@ -21,7 +21,7 @@ class WPFTS_Utils
 			where 
 				`object_id` = "'.addslashes($object_id).'" and 
 				`object_type` = "'.addslashes($object_type).'"';
-		$res = $wpdb->get_results($q, ARRAY_A);
+		$res = $wpfts_core->db->get_results($q, ARRAY_A);
 
 		if ((count($res) < 1) || ($res[0]['cached_dt'] != $mtime) || ($is_force_reindex)) {
 			// use callback to extract text data
@@ -44,7 +44,7 @@ class WPFTS_Utils
 
 					if (count($res) > 0) {
 						// Update
-						$wpdb->update(
+						$wpfts_core->db->update(
 							$idx.'rawcache', 
 							$dbarr,
 							array(
@@ -52,7 +52,7 @@ class WPFTS_Utils
 							));
 					} else {
 						// Insert
-						$wpdb->insert(
+						$wpfts_core->db->insert(
 							$idx.'rawcache', ///
 							$dbarr
 						);

@@ -24,12 +24,12 @@ class WPFTS_Semaphore
 	 */
 	function Check()
 	{
-		global $wpdb;
+		global $wpfts_core, $wpdb;
 
 		$time = time();
 
 		$q = 'select `option_value` from `'.$wpdb->options.'` where `option_name` = "'.addslashes($this->option_name).'"';
-		$res = $wpdb->get_results($q, ARRAY_A);
+		$res = $wpfts_core->db->get_results($q, ARRAY_A);
 
 		// Check if not expired and process_id is ours
 		if (count($res) > 0) {
@@ -51,12 +51,12 @@ class WPFTS_Semaphore
 	 */
 	function Enter()
 	{
-		global $wpdb;
+		global $wpdb, $wpfts_core;
 
 		$time = time();
 
 		$q = 'select `option_value` from `'.$wpdb->options.'` where `option_name` = "'.addslashes($this->option_name).'"';
-		$res = $wpdb->get_results($q, ARRAY_A);
+		$res = $wpfts_core->db->get_results($q, ARRAY_A);
 
 		// Check if not expired and process_id is ours
 		if (count($res) > 0) {
@@ -76,7 +76,7 @@ class WPFTS_Semaphore
 		);
 		
 		$q = 'replace `'.$wpdb->options.'` (`option_name`, `option_value`, `autoload`) values ("'.$this->option_name.'", "'.addslashes(json_encode($data)).'", "no")';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 
 		// Successful or not? We will check in the next Check() request
 		return $this->Check();
@@ -87,15 +87,15 @@ class WPFTS_Semaphore
 	 */
 	function Leave()
 	{
-		global $wpdb;
+		global $wpfts_core, $wpdb;
 
 		$q = 'delete from `'.$wpdb->options.'` where option_name = "'.$this->option_name.'"';
-		$wpdb->query($q);
+		$wpfts_core->db->query($q);
 	}
 
 	function Update()
 	{
-		global $wpdb;
+		global $wpfts_core, $wpdb;
 
 		$time = time();
 
@@ -108,7 +108,7 @@ class WPFTS_Semaphore
 			);
 
 			$q = 'replace `'.$wpdb->options.'` (`option_name`, `option_value`, `autoload`) values ("'.$this->option_name.'", "'.addslashes(json_encode($data)).'", "no")';
-			$wpdb->query($q);
+			$wpfts_core->db->query($q);
 		}
 	}
 }

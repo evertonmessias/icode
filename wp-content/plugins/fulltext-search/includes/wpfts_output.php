@@ -1,7 +1,7 @@
 <?php
 
 /**  
- * Copyright 2013-2021 Epsiloncool
+ * Copyright 2013-2022 Epsiloncool
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
  *  It will keep me working further on this useful product.
  ******************************************************************************
  * 
- *  @copyright 2013-2021
+ *  @copyright 2013-2022
  *  @license GPLv3
  *  @package Wordpress Fulltext Search
  *  @author Epsiloncool <info@e-wm.org>
@@ -1325,7 +1325,7 @@ class WPFTS_Output
 		);
 		
 		$q = 'select distinct post_type from `'.$wpdb->posts.'` order by post_type asc';
-		$res = $wpdb->get_results($q, ARRAY_A);
+		$res = $wpfts_core->db->get_results($q, ARRAY_A);
 		
 		$post_types = array('any' => __('* (Any)', 'fulltext-search'));
 		foreach ($res as $d) {

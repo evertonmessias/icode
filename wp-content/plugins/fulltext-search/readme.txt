@@ -3,7 +3,7 @@ Contributors: Epsiloncool
 Donate link: https://www.patreon.com/epsiloncool
 Tags: search pdf, search, better search, relevance, shortcode search, file search, relevant search, extended search
 Requires at least: 5.0
-Tested up to: 5.8.2
+Tested up to: 5.9.2
 Stable tag: trunk
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -94,6 +94,11 @@ Do not hesistate to write to us at [Contact Us](https://fulltextsearch.org/conta
 8. Live Search widget example
 
 == Changelog ==
+
+= 1.48.150 =
+* Increased compatibility with PHP8.0+
+* Fixed 7 bugs with database access and deprecated code
+* Added hooks to add flexibility to remove/add specific shortcodes from the indexing
 
 = 1.47.148 =
 * Improved style/js loading code (thanks to @nextendweb !)

@@ -1,7 +1,7 @@
 <?php
 
 /**  
- * Copyright 2013-2021 Epsiloncool
+ * Copyright 2013-2022 Epsiloncool
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
  *  It will keep me working further on this useful product.
  ******************************************************************************
  * 
- *  @copyright 2013-2021
+ *  @copyright 2013-2022
  *  @license GPLv3
  *  @package Wordpress Fulltext Search
  *  @author Epsiloncool <info@e-wm.org>
@@ -33,10 +33,10 @@ require_once dirname(__FILE__).'/wpfts_jx.php';
 require_once dirname(__FILE__).'/wpfts_htmltools.php';
 require_once dirname(__FILE__).'/wpfts_output.php';
 require_once dirname(__FILE__).'/wpfts_result_item.php';
-//require_once dirname(__FILE__).'/wpfts_db_updates.php';
 require_once dirname(__FILE__).'/wpfts_shortcodes.php';
 require_once dirname(__FILE__).'/wpfts_semaphore.php';
 require_once dirname(__FILE__).'/wpfts_flare.php';
+require_once dirname(__FILE__).'/wpfts_db.php';
 
 class WPFTS_Core
 {
@@ -51,6 +51,8 @@ class WPFTS_Core
 	
 	public $root_url;
 	public $root_dir;
+
+	public $db = null;	// WPDB wrapper (soft mode)
 	
 	public $index_error = '';
 	
@@ -78,6 +80,7 @@ class WPFTS_Core
 	{
 		$this->_index = new WPFTS_Index();
 		$this->_flare = new WPFTS_Flare($this->_flare_url);
+		$this->db = new WPFTS_DB();
 		
 		if (is_admin()) {
 			add_action('admin_notices', array($this, 'admin_notices'));
@@ -88,8 +91,6 @@ class WPFTS_Core
 	
 	public function Init()
 	{
-		global $wpdb;
-
 		// Reinstall cron hooks
 		$this->installCronIndexerTask();
 		
@@ -103,7 +104,7 @@ class WPFTS_Core
 		
 		// Get basic MySQL info
 		$q = 'select version() v';
-		$res = $wpdb->get_results($q, ARRAY_A);
+		$res = $this->db->get_results($q, ARRAY_A);
 
 		$is_mariadb = false;
 		$mysql_version = '';
@@ -126,7 +127,7 @@ class WPFTS_Core
 			if (version_compare($this->mysql_version, '10.3.0', '>')) {
 				// Apply the patch
 				$q = "set optimizer_switch='split_materialized=off'";
-				$wpdb->query($q);
+				$this->db->query($q);
 			}
 		}
 
@@ -263,8 +264,6 @@ class WPFTS_Core
 
 	public function GetUpdates()
 	{
-		//global $wpfts_db_updates;
-
 		$current_db_version = $this->get_option('current_db_version');
 		$current_code_version = $this->get_option('current_cb_version');
 		$actual_version = WPFTS_VERSION;
@@ -656,7 +655,7 @@ class WPFTS_Core
 
 		$pfx = $this->GetDBPrefix();
 
-		$wpdb->insert($pfx.'qlog', array(
+		$this->db->insert($pfx.'qlog', array(
 			'query' => $query,
 			'n_results' => -1,
 			'q_time' => 0,
@@ -715,7 +714,7 @@ class WPFTS_Core
 							post_mime_type in ('.implode(',', $mimes_q).')
 						group by post_mime_type 
 						order by n desc';
-					$res2 = $wpdb->get_results($q, ARRAY_A);
+					$res2 = $this->db->get_results($q, ARRAY_A);
 
 					if ((count($res2) > 0) && ($res2[0]['n'] >= 10)) {
 						// Found something
@@ -929,20 +928,14 @@ class WPFTS_Core
 
 	public function removeRawCache($post_id)
 	{
-		global $wpdb;
-
 		$idx = $this->_index->dbprefix();
 
 		$q = 'delete from `'.$idx.'rawcache` where (`object_id` = "'.addslashes($post_id).'") and (`object_type` = "wp_post")';
-		$wpdb->query($q);
+		$this->db->query($q);
 	}
 
 	public function getCachedAttachmentContent($post_id, $is_reset_cache = false) 
 	{
-		global $wpdb;
-
-		//$idx = $this->_index->dbprefix();
-
 		$post = get_post($post_id);
 		$chunks = array(
 			'post_title' => $post->post_title,
@@ -1985,7 +1978,7 @@ class WPFTS_Core
 		$used_mt = get_transient('wpfts_used_mt');
 		if ($used_mt === false) {
 			$q = 'select post_mime_type, count(*) n from `'.$wpdb->posts.'` group by `post_mime_type`';
-			$r2 = $wpdb->get_results($q, ARRAY_A);
+			$r2 = $this->db->get_results($q, ARRAY_A);
 			$used_mt = array();
 			foreach ($r2 as $d) {
 				if (strlen($d['post_mime_type']) > 0) {
@@ -2388,7 +2381,7 @@ class WPFTS_Core
 					(wi.force_rebuild = 0) and 
 					((p.ID is null) or (wi.tdt != p.post_modified))
 				';
-			$wpdb->query($q);
+			$this->db->query($q);
 
 			// Find post records that have no index records yet and initialize them
 			$start_from = 0;
@@ -2407,7 +2400,7 @@ class WPFTS_Core
 						(wi.id is null)
 						limit '.$start_from.', '.$chunk_length.'
 					';
-				$r2 = $wpdb->get_results($q, ARRAY_A);
+				$r2 = $this->db->get_results($q, ARRAY_A);
 
 				if (count($r2) > 0) {
 					// We found some post records, we need to create new index records for them
@@ -2418,7 +2411,7 @@ class WPFTS_Core
 
 					if (count($vv) > 0) {
 						$q = 'insert into `'.$idx.'index` (`tid`, `tsrc`, `tdt`, `build_time`, `update_dt`, `force_rebuild`, `locked_dt`) values '.implode(', ', $vv);
-						$wpdb->query($q);
+						$this->db->query($q);
 					}
 
 					if (count($r2) >= $chunk_length) {
@@ -2446,8 +2439,6 @@ class WPFTS_Core
 
 	public function GetPostIndexStatus($post_ids = array())
 	{
-		global $wpdb;
-
 		$ret = array();
 
 		if ((!is_array($post_ids)) || (count($post_ids) < 1)) {
@@ -2462,7 +2453,7 @@ class WPFTS_Core
 		}
 
 		$q = 'select * from `'.$idx.'index` where tid in ('.implode(',', $ids).') and tsrc = "wp_posts"';
-		$r2 = $wpdb->get_results($q, ARRAY_A);
+		$r2 = $this->db->get_results($q, ARRAY_A);
 
 		$all_ret = array();
 		foreach ($r2 as $dd) {
@@ -2545,8 +2536,6 @@ class WPFTS_Core
 
 	public function GetRecordsToRebuild($n_max = 1)
 	{	
-		global $wpdb;
-		
 		$idx = $this->GetDBPrefix();
 		
 		// To optimize MySQL query we going to make 2 requests
@@ -2557,7 +2546,7 @@ class WPFTS_Core
 				(force_rebuild != 0)
 				order by force_rebuild desc
 			limit '.intval($n_max).'';
-		$r = $wpdb->get_results($q, ARRAY_A);
+		$r = $this->db->get_results($q, ARRAY_A);
 		
 		if (count($r) > 0) {
 			return $r;
@@ -2571,7 +2560,7 @@ class WPFTS_Core
 				(build_time = 0)
 			order by build_time asc, id asc 
 			limit '.intval($n_max).'';
-		$r = $wpdb->get_results($q, ARRAY_A);
+		$r = $this->db->get_results($q, ARRAY_A);
 		
 		return $r;
 	}
@@ -2586,15 +2575,12 @@ class WPFTS_Core
 		}
 
 		if (count($a) > 0) {
-
-			global $wpdb;
-			
 			$idx = $this->GetDBPrefix();
 				
 			$vv = $this->SQLSetList($a);
 
 			$q = 'update `'.$idx.'index` set '.implode(', ', $vv).' where id = "'.addslashes($id).'"';
-			$wpdb->query($q);
+			$this->db->query($q);
 		}
 	}
 
@@ -2605,9 +2591,6 @@ class WPFTS_Core
 		}, ARRAY_FILTER_USE_KEY);
 
 		if (count($a) > 0) {
-
-			global $wpdb;
-
 			$idx = $this->GetDBPrefix();
 				
 			$a['index_id'] = $id;
@@ -2615,7 +2598,7 @@ class WPFTS_Core
 			list($kk, $vv) = $this->SQLKeyValueLists($a);
 
 			$q = 'replace into `'.$idx.'ilog` ('.implode(',', $kk).') values ('.implode(',', $vv).')';
-			$wpdb->query($q);	
+			$this->db->query($q);	
 		}
 	}
 
@@ -2626,15 +2609,12 @@ class WPFTS_Core
 		}, ARRAY_FILTER_USE_KEY);
 
 		if (count($a) > 0) {
-
-			global $wpdb;
-
 			$idx = $this->GetDBPrefix();
 				
 			$vv = $this->SQLSetList($a);
 	
 			$q = 'update `'.$idx.'ilog` set '.implode(', ', $vv).' where index_id = "'.addslashes($id).'"';
-			$wpdb->query($q);
+			$this->db->query($q);
 		}
 	}
 
@@ -2882,7 +2862,6 @@ exit();
 								$status['tsd'] = time();
 							}
 						}
-
 					} else {
 						// tsrc is not 'wp_posts'
 						// Custom processing?

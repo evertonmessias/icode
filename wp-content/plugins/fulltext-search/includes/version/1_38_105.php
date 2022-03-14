@@ -3,7 +3,7 @@
 return array(
 	'callback' => function()
 	{
-		global $wpfts_core, $wpdb;
+		global $wpfts_core;
 
 		$dbscheme = array(
 			'map' => array(
@@ -58,11 +58,11 @@ return array(
 		foreach ($qr as $k => $d) {
 			
 			$q = 'drop table if exists `'.$index->dbprefix().$k.'`';
-			$wpdb->query($q);
+			$wpfts_core->db->query($q);
 			
-			$wpdb->query($d['create2']);
-			if ($wpdb->last_error) {
-				$index->log('Can\'t create table "'.$index->dbprefix().$k.'": '.$wpdb->last_error);
+			$wpfts_core->db->query($d['create2']);
+			if ($wpfts_core->db->get_last_error()) {
+				$index->log('Can\'t create table "'.$index->dbprefix().$k.'": '.$wpfts_core->db->get_last_error());
 				$success = false;
 			}	
 		}

@@ -1,7 +1,7 @@
 <?php
 
 /**  
- * Copyright 2013-2021 Epsiloncool
+ * Copyright 2013-2022 Epsiloncool
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
  *  It will keep me working further on this useful product.
  ******************************************************************************
  * 
- *  @copyright 2013-2021
+ *  @copyright 2013-2022
  *  @license GPL v3
  *  @package Wordpress Fulltext Search
  *  @author Epsiloncool <info@e-wm.org>

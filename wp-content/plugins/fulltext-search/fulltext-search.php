@@ -3,8 +3,8 @@
 /*
 Plugin Name: WP Fulltext Search
 Description: Implementing a true indexed full-text search over wordpress posts and metas without using any external indexing software.
-Version: 1.47.148
-Tested up to: 5.8.2
+Version: 1.48.150
+Tested up to: 5.9.2
 Author: Epsiloncool
 Author URI: https://e-wm.org
 License: GPLv3
@@ -14,7 +14,7 @@ Domain Path: /languages/
 */
 
 /**
- *   Copyright 2013-2021 Epsiloncool
+ *   Copyright 2013-2022 Epsiloncool
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@ Domain Path: /languages/
  *  It will keep me working further on this useful product.
  ******************************************************************************
  * 
- *  @copyright 2013-2021
+ *  @copyright 2013-2022
  *  @license GPLv3
- *  @version 1.47.148
+ *  @version 1.48.150
  *  @package Wordpress Fulltext Search
  *  @author Epsiloncool <info@e-wm.org>
  */
@@ -50,7 +50,7 @@ Domain Path: /languages/
  * 
  */
 
-define('WPFTS_VERSION', '1.47.148');
+define('WPFTS_VERSION', '1.48.150');
 
 require_once dirname(__FILE__).'/includes/wpfts_core.php';
 require_once dirname(__FILE__).'/includes/wpfts_output.php';
@@ -453,8 +453,6 @@ function wpfts_post_reindex($post_id, $is_force_remove = false, $is_raw_cache_re
 {
 	global $wpfts_core;
 	
-	global $wpdb;
-
 	if ($is_raw_cache_remove) {
 		$wpfts_core->removeRawCache($post_id);
 	}
@@ -464,7 +462,7 @@ function wpfts_post_reindex($post_id, $is_force_remove = false, $is_raw_cache_re
 
 	// Make some magic to force this post indexed first
 	$q = 'update `wpftsi_index` set force_rebuild = 2 where tid = "'.addslashes($post_id).'" and tsrc = "wp_posts"';
-	$wpdb->query($q);
+	$wpfts_core->db->query($q);
 
 	// Force status recalculation
 	$wpfts_core->set_option('status_next_ts', 0);
