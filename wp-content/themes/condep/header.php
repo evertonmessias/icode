@@ -127,7 +127,7 @@ if (!is_front_page() && !is_user_logged_in())wp_redirect(WP_HOME . "/wp-admin");
       </div>
 
       <div class="search">
-        <?php echo get_search_form() ?>
+        <?php get_search_form() ?>
       </div>
 
       <div class="social-links">

@@ -48,7 +48,7 @@
 			<div class="section-title">
 				<h2>Sobre</h2>
 			</div>
-			<div id="Sibgrapi" class="row">
+			<div class="row">
 				<div class="col-lg-12 pt-4 pt-lg-0" data-aos="fade-up" data-aos-delay="100">
 					<?php
 					echo get_option('portal_input_7');

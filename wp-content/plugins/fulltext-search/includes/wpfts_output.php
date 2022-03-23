@@ -1156,13 +1156,13 @@ class WPFTS_Output
 					</div>
 				</div>
 
-				<div class="wpfts_pro_only">
+	
 				<div class="row">
 					<div class="col fixed-200 font-weight-bolder">
 						<?php echo __('Include Attachments', 'fulltext-search'); ?><br><?php echo __('(Available in Pro only)', 'fulltext-search'); ?>
 					</div>
 					<div class="col fixed-150">
-						<label for="lchwpfts_include_attachments"><input type="checkbox" value="1" id="lchwpfts_include_attachments" disabled="disabled">&nbsp;<span><?php echo __('Enabled', 'fulltext-search'); ?></span></label>
+						<label for="lchwpfts_include_attachments"><input type="checkbox" value="1" id="lchwpfts_include_attachments" >&nbsp;<span><?php echo __('Enabled', 'fulltext-search'); ?></span></label>
 					</div>
 					<div class="col d-xl-none text-right">
 						<p><a data-toggle="collapse" href="#wf_hint_ie_incatt" role="button" aria-expanded="false" aria-controls="wf_hint_ie_incatt"><i class="fa fa-info-circle"></i></a></p>
@@ -1171,7 +1171,7 @@ class WPFTS_Output
 						<p class="text-secondary"><i><?php echo __('Allow for posts to be searchable by the content of their attached files. When enabled, this option will include attachments\' index to their parent post indexes.', 'fulltext-search'); ?></i></p>
 					</div>
 				</div>
-				</div>
+				
 
 						</div>
 					</div>

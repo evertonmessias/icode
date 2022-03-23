@@ -77,3 +77,7 @@ add_action('init', 'myprefix_unregister_tags');
 
 //************* Add thumbnails
 add_theme_support('post-thumbnails', array('post'));
+
+
+//************* Add Searchwp conflict_notice false
+add_filter( 'searchwp_show_conflict_notices', '__return_false' ); 
