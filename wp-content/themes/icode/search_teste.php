@@ -10,7 +10,9 @@ $args = array(
 
 $query = new WP_Query($args);
 
+echo json_encode($query);
 
+/*
 foreach($query->posts as $dado){
     echo "<p><strong>Name</strong>: ".$dado->post_name."</p>";
     echo "<p><strong>File</strong>: ".$dado->guid."</p>";

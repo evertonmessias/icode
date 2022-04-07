@@ -50,7 +50,7 @@
 
                   ?>
                      <li>
-                        <a href="<?php echo $dado->guid; ?>"><?php echo $dado->post_name.".pdf";/*explode('/',$dado->guid)[7];*/ ?></a>
+                        <a href="<?php echo $dado->guid; ?>"><?php echo $dado->post_title.".pdf";/*explode('/',$dado->guid)[7];*/ ?></a>
                      </li>
                <?php
                   }
