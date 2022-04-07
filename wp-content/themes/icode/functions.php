@@ -3,7 +3,7 @@
 //Functions EvertonM
 
 //*************URL theme [ get_template_directory_uri() ]
-define('SITEPATH', '/wp-content/themes/condep/');
+define('SITEPATH', '/wp-content/themes/icode/');
 
 
 //************* Login_redirect

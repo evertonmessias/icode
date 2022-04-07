@@ -7,20 +7,23 @@
 #topbar .search form label{
     display: none;
 }
-#topbar .search form input{
+#topbar .search form input,#topbar .search form select{
     border-radius: 2px;
 }
-#topbar .search form input[type=text]{
+#topbar .search form input[type=text],#topbar .search form select{
     border: 0px;    
+}
+#topbar .search form select{
+    padding: 3px;
 }
 #topbar .search form input[type=submit]{
     border: 0px;
-    margin-left: -2px;
+    margin-left: -1px;
     background-color: #FFF;
     color: #999;
 }
 #topbar .search form input[type=submit]:hover{
-    background-color: #aaa;
+    background-color: #ccc;
     color: #fff;
 }
 

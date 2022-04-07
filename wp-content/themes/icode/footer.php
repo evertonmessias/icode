@@ -7,8 +7,8 @@
           <div class="col-lg-3 col-md-6 footer-contact">
             <h3 class="logo mr-auto">
               <a href="/">
-                <img src="<?php echo get_option('portal_input_2'); ?>" title="CONDEP"><br><br>
-                <span>CONDEP</span>
+                <img src="<?php echo get_option('portal_input_2'); ?>" title="icode"><br><br>
+                <span>icode</span>
               </a>
             </h3>
             <p>
@@ -18,7 +18,7 @@
             </p>
             <p>
               <?php if (get_option('portal_input_4') != "") { ?>
-                <i class="bx bxl-whatsapp"></i>&ensp;<a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo get_option('portal_input_4'); ?>&text=CONDEP"><?php echo get_option('portal_input_4'); ?></a>
+                <i class="bx bxl-whatsapp"></i>&ensp;<a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo get_option('portal_input_4'); ?>&text=icode"><?php echo get_option('portal_input_4'); ?></a>
               <?php } ?>
             </p>
           </div>
@@ -53,7 +53,7 @@
 
     <div class="container py-4">
       <div class="copyright">
-        <strong><span>CONDEP</span></strong>. All rights reserved
+        <strong><span>icode</span></strong>. All rights reserved
       </div>
       <div class="credits">
         Designed by <a href="https://ic.unicamp.br/~everton/" target="_blank">EvM</a>
@@ -79,7 +79,7 @@
   <!-- Template Main JS File -->
   <script src="<?php echo SITEPATH; ?>assets/js/quicksearch.js"></script>
   <script src="<?php echo SITEPATH; ?>assets/js/main.js"></script>
-  <script src="<?php echo SITEPATH; ?>assets/js/condep.js"></script>
+  <script src="<?php echo SITEPATH; ?>assets/js/icode.js"></script>
 
   <?php wp_footer(); ?>
   </body>

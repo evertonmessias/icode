@@ -2,7 +2,7 @@
 //Settings *************************************************
 function portal_page_html()
 { ?>
-	<div class="settings-condep">
+	<div class="settings-icode">
 		<h1 class="title">Configurações da Página Inicial</h1>
 		<hr>
 		<form method="post" action="options.php">
@@ -111,7 +111,7 @@ function portal_page_html()
 
 function portal_options_page()
 {
-	add_submenu_page('condep', 'Pagina Inicial', 'Pagina Inicial', 'edit_posts', 'pagina-inicial', 'portal_page_html', 1);
+	add_submenu_page('icode', 'Pagina Inicial', 'Pagina Inicial', 'edit_posts', 'pagina-inicial', 'portal_page_html', 1);
 }
 add_action('admin_menu', 'portal_options_page');
 

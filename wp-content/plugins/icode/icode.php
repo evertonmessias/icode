@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Plugin Name: CONDEP
+ * Plugin Name: icode
  * Plugin URI: https://ic.unicamp.br/~everton
- * Description: Plugin CONDEP, include CONGREGA, CI & DEPTOS
+ * Description: Plugin icode, include CONGREGA, CI & DEPTOS
  * Author: EvM.
  * Version: 1.0
- * Text Domain: CONDEP
- * Plugin CONDEP
+ * Text Domain: icode
+ * Plugin icode
  */
 
 // Exit if accessed directly.
@@ -16,18 +16,18 @@ if (!defined('ABSPATH')) {
 }
 
 // FUNCTIONS ************************************************
-include ABSPATH . '/wp-content/plugins/condep/includes/functions.php';
+include ABSPATH . '/wp-content/plugins/icode/includes/functions.php';
 
 // TYPES ************************************************
-include ABSPATH . '/wp-content/plugins/condep/includes/types/congrega.php';
-include ABSPATH . '/wp-content/plugins/condep/includes/types/historicocongrega.php';
+include ABSPATH . '/wp-content/plugins/icode/includes/types/congrega.php';
+include ABSPATH . '/wp-content/plugins/icode/includes/types/historicocongrega.php';
 
 
 // SETTINGS ************************************************
-include ABSPATH . '/wp-content/plugins/condep/includes/settings.php';
+include ABSPATH . '/wp-content/plugins/icode/includes/settings.php';
 
 // POSTMETA POST ************************************************
-//include ABSPATH . '/wp-content/plugins/condep/includes/postmeta-post.php';
+//include ABSPATH . '/wp-content/plugins/icode/includes/postmeta-post.php';
 
 
 // OBJECTS *************************************************

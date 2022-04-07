@@ -39,7 +39,7 @@ if (!is_front_page() && !is_user_logged_in())wp_redirect(WP_HOME . "/wp-admin");
 
   <!-- Template Main CSS File -->
   <link href="<?php echo SITEPATH; ?>assets/css/style.css" rel="stylesheet">
-  <link href="<?php echo SITEPATH; ?>assets/css/condep.css" rel="stylesheet">
+  <link href="<?php echo SITEPATH; ?>assets/css/icode.css" rel="stylesheet">
   <style>
     .back-to-top i:hover,
     #topbar,
@@ -122,12 +122,19 @@ if (!is_front_page() && !is_user_logged_in())wp_redirect(WP_HOME . "/wp-admin");
         <?php } ?>
         &emsp;
         <?php if (get_option('portal_input_4') != "") { ?>
-          <i class="bx bxl-whatsapp"></i>&ensp;<a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo get_option('portal_input_4'); ?>&text=CONDEP"><?php echo get_option('portal_input_4'); ?></a>
+          <i class="bx bxl-whatsapp"></i>&ensp;<a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo get_option('portal_input_4'); ?>&text=icode"><?php echo get_option('portal_input_4'); ?></a>
         <?php } ?>
       </div>
 
       <div class="search">
-        <?php get_search_form() ?>
+        <form action="/" method="get">
+          <input type="text" required name="s" id="search" value="<?php the_search_query(); ?>" />
+          <select name="t">            
+            <option value="post" selected>Post</option>
+            <option value="pdf">PDF</option>
+          </select>
+          <input type="submit" value="Pesquisar" />
+        </form>
       </div>
 
       <div class="social-links">

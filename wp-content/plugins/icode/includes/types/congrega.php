@@ -108,4 +108,4 @@ function role_caps_congrega()
 add_action('admin_init', 'role_caps_congrega', 999);
 
 // POSTMETA ************************************************
-include ABSPATH . '/wp-content/plugins/condep/includes/types/postmeta/postmeta-congrega.php';
+include ABSPATH . '/wp-content/plugins/icode/includes/types/postmeta/postmeta-congrega.php';

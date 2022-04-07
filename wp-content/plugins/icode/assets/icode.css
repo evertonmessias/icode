@@ -1,4 +1,4 @@
-.settings-condep, .about-condep{
+.settings-icode, .about-icode{
     display: block;
     position: relative;
     margin: 0 auto;
@@ -10,18 +10,18 @@
     padding: 20px;
 }
 
-.settings-condep .wp-editor-wrap{
+.settings-icode .wp-editor-wrap{
     width: 150%;
 }
 
-.settings-condep .title, .about-condep .title{
+.settings-icode .title, .about-icode .title{
     color: #f00;
 }
-.settings-condep hr, .about-condep hr{
+.settings-icode hr, .about-icode hr{
     background-color: #bbb !important;
     border: 1px solid #bbb !important;
 }
-.settings-condep table{
+.settings-icode table{
     width: 65em;
     border-spacing: 0;
 }
@@ -47,39 +47,39 @@
     display: none;
 }
 
-.settings-condep table img, .tcongrega img{
+.settings-icode table img, .tcongrega img{
     height: 100%;   
 }
 
-.settings-condep input[type=number]{
+.settings-icode input[type=number]{
     width: 7em;
     font-weight: 400;
 }
-.settings-condep input[type=email],.settings-condep input[type=text],.icongrega{
+.settings-icode input[type=email],.settings-icode input[type=text],.icongrega{
     width: 40em;
     font-weight: 400;
 }
-.settings-condep textarea, .tcongrega textarea{
+.settings-icode textarea, .tcongrega textarea{
     width: 100%;
     font-weight: 400;
     margin-bottom: -3px;
 }
 
-.settings-condep table td:nth-child(1),.settings-condep table td:nth-child(3),
+.settings-icode table td:nth-child(1),.settings-icode table td:nth-child(3),
 .tcongrega td:nth-child(1){
     width: 4em;
 }
 
-.settings-condep table td:nth-child(1) div,
+.settings-icode table td:nth-child(1) div,
 .tcongrega td:nth-child(1) div{
     text-align: center !important;
     font-weight: 600;
 }
-.settings-condep table td:nth-child(2),
+.settings-icode table td:nth-child(2),
 .tcongrega td:nth-child(2){
     width: 40em;   
 }
-.settings-condep table td:nth-child(2) input{
+.settings-icode table td:nth-child(2) input{
     width: 100%;
 }
 .tcongrega td:nth-child(2) input{

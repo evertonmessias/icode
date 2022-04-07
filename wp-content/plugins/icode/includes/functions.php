@@ -47,8 +47,8 @@ function style_and_script()
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel='stylesheet' href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'>
 <?php
-	wp_enqueue_style('stilos', '/wp-content/plugins/condep/assets/condep.css');
-	wp_enqueue_script('scripts', '/wp-content/plugins/condep/assets/condep.js');
+	wp_enqueue_style('stilos', '/wp-content/plugins/icode/assets/icode.css');
+	wp_enqueue_script('scripts', '/wp-content/plugins/icode/assets/icode.js');
 }
 add_action('admin_enqueue_scripts', 'style_and_script');
 
@@ -63,16 +63,16 @@ add_action('admin_menu', 'wd_admin_menu_rename');
 
 
 // ***************** Add in Menu
-function menu_condep()
+function menu_icode()
 {
-	add_menu_page('Portal', 'Portal', 'edit_posts', 'condep', 'function_about', 'dashicons-screenoptions', 1);
+	add_menu_page('Portal', 'Portal', 'edit_posts', 'icode', 'function_about', 'dashicons-screenoptions', 1);
 }
-add_action('admin_menu', 'menu_condep');
+add_action('admin_menu', 'menu_icode');
 
 // ***************** Add About
 function function_about()
 {
-	include ABSPATH . '/wp-content/plugins/condep/includes/about.php';
+	include ABSPATH . '/wp-content/plugins/icode/includes/about.php';
 }
 add_action('function_about', 'function_about');
 

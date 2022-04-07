@@ -1,5 +1,5 @@
 window.onload = function () {
-    $("#adminmenu #toplevel_page_condep ul li.wp-first-item a").html("Sobre"); 
+    $("#adminmenu #toplevel_page_icode ul li.wp-first-item a").html("Sobre"); 
   
     if(/historicocongrega/.test(window.location.href)){
         $("#wpbody-content a.page-title-action").hide();
