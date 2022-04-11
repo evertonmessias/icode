@@ -1,15 +1,15 @@
 <?php
-if (!is_front_page() && !is_user_logged_in())wp_redirect(WP_HOME . "/wp-admin");
+if (!is_front_page() && !is_user_logged_in()) wp_redirect(WP_HOME . "/wp-admin");
 ?>
 
 
 <?php
-  // ********************** Montar header para o portal
-  $nav_menu_portal = true;
-  $url_menu = "/";
-  $title = get_option('portal_input_0');
-  $post_color = get_option('portal_input_3');
-  $logo = get_option('portal_input_2');
+// ********************** Montar header para o portal
+$nav_menu_portal = true;
+$url_menu = "/";
+$title = get_option('portal_input_0');
+$post_color = get_option('portal_input_3');
+$logo = get_option('portal_input_2');
 ?>
 
 <!DOCTYPE html>
@@ -113,7 +113,7 @@ if (!is_front_page() && !is_user_logged_in())wp_redirect(WP_HOME . "/wp-admin");
 
 <body>
   <!-- ======= Top Bar ======= -->
-  <div id="topbar" <?php if(is_user_logged_in())echo "style='margin-top:30px;'"; ?> class="d-none d-lg-flex align-items-center fixed-top">
+  <div id="topbar" <?php if (is_user_logged_in()) echo "style='margin-top:30px;'"; ?> class="d-none d-lg-flex align-items-center fixed-top">
     <div class="container d-flex">
 
       <div class="contact-info mr-auto">
@@ -126,19 +126,20 @@ if (!is_front_page() && !is_user_logged_in())wp_redirect(WP_HOME . "/wp-admin");
         <?php } ?>
       </div>
 
-      <div class="search">
-        <form action="/" method="get">
-          <input type="text" required name="s" id="search" value="<?php the_search_query(); ?>" />
-          <select name="t">            
-            <option value="post" selected>Post</option>
-            <option value="pdf">PDF</option>
-          </select>
-          <input type="submit" value="Pesquisar" />
-        </form>
-      </div>
+      <?php if (is_user_logged_in()) { ?>
+        <div class="search">
+          <form action="/" method="get">
+            <input type="text" required name="s" id="search" value="<?php the_search_query(); ?>" />
+            <select name="t">
+              <option value="post" selected>Post</option>
+              <option value="pdf">PDF</option>
+            </select>
+            <input type="submit" value="Pesquisar" />
+          </form>
+        </div>
+      <?php } ?>
 
       <div class="social-links">
-
         <a title="Login" href="/wp-admin"><i class="bx bxs-user"></i></a>
       </div>
 
@@ -146,28 +147,30 @@ if (!is_front_page() && !is_user_logged_in())wp_redirect(WP_HOME . "/wp-admin");
   </div>
 
   <!-- ======= Header ======= -->
-  <header id="header" <?php if(is_user_logged_in())echo "style='margin-top:30px;'"; ?> class="fixed-top">
+  <header id="header" <?php if (is_user_logged_in()) echo "style='margin-top:30px;'"; ?> class="fixed-top">
     <div class="container d-flex align-items-center">
-      <h1 class="logo mr-auto"> 
+      <h1 class="logo mr-auto">
         <a href="<?php echo $url_menu; ?>">
           <?php if ($logo != "") { ?>
             <img src="<?php echo $logo; ?>" title="<?php echo $title; ?>">
           <?php } ?>
           <span><?php echo $title; ?></span>
-        </a> 
+        </a>
       </h1>
       <!-- Nav-Menu -->
       <nav class="nav-menu d-none d-lg-block">
         <div class="search">
           <?php echo get_search_form() ?>
         </div>
-        <ul>         
+        <ul>
           <li id="about"><a href="/#About">Sobre</a></li>
-          <li id="congrega"><a href="/congrega">Congrega</a></li>
-          <li id="ci"><a href="/ci">CI</a></li>
-          <li id="dsc"><a href="/dsc">DSC</a></li>
-          <li id="dsi"><a href="/dsi">DSI</a></li>
-          <li id="dtc"><a href="/dtc">DTC</a></li>
+          <?php if (is_user_logged_in()) { ?>
+            <li id="congrega"><a href="/congrega">Congrega</a></li>
+            <li id="ci"><a href="/ci">CI</a></li>
+            <li id="dsc"><a href="/dsc">DSC</a></li>
+            <li id="dsi"><a href="/dsi">DSI</a></li>
+            <li id="dtc"><a href="/dtc">DTC</a></li>
+          <?php } ?>
         </ul>
       </nav>
       <!-- .nav-menu -->
