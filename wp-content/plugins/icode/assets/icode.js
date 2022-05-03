@@ -23,7 +23,8 @@ function upload_image(type, val) {
         var url = attachment.url.split('/').splice(3, 6);
         url = url.join('/');
         if (type == 1) { //congrega
-            $('#congrega_file_' + val).val("/" + url);            
+            $('#portal_input_' + val).val("/" + url);  
+            $('#preview_portal_input_' + val).attr('src', "/" + url);
         }       
     }).open();   
 
