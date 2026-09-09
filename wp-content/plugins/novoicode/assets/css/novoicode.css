@@ -1,0 +1,56 @@
+/* Modifica o fundo do painel */
+#wpwrap {
+    background-color: #f4f7f6;
+}
+
+/* Modifica o topo do painel */
+#wpadminbar {
+    background-color: #343a40 !important;
+}
+
+/* Modifica o menu lateral */
+#adminmenu {
+    background: #212529 !important;
+}
+
+#adminmenu .wp-has-current-submenu .wp-submenu,
+#adminmenu .wp-has-current-submenu .wp-submenu a {
+    background: #343a40 !important;
+    color: #ffffff !important;
+}
+
+#adminmenu a {
+    color: #ffffff !important;
+}
+
+#adminmenu li.wp-menu-separator {
+    border-bottom: 1px solid #495057 !important;
+}
+
+/* Modifica os botões */
+.wp-core-ui .button-primary {
+    background: #0d6efd !important;
+    border-color: #0d6efd !important;
+}
+
+.wp-core-ui .button-primary:hover {
+    background: #0b5ed7 !important;
+}
+
+/* Modifica os cards do painel inicial */
+.postbox {
+    border-radius: 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#categorydiv{
+    display: none;
+}
+
+#default-sortables input{
+    width: 100%;
+}
+
+.form-pdfparser input,.form-pdfparser select{
+    width: 150px;
+}

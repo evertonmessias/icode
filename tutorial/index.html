@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Sistema ICODE - Tutorial para Editores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content-area {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            color: #34495e;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        /* Estilos para os dropdowns */
+        .dropdown-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .dropdown-nav .dropdown {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .dropdown-nav .dropdown-toggle {
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .dropdown-nav .dropdown-toggle:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-nav .dropdown-menu {
+            width: 100%;
+            max-height: 500px;
+            overflow-y: auto;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .dropdown-nav .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #f8f9fa;
+            transition: all 0.2s;
+            color: #2c3e50;
+        }
+
+        .dropdown-nav .dropdown-item:hover {
+            background: #e9ecef;
+            color: #2c3e50;
+            transform: translateX(5px);
+        }
+
+        .dropdown-nav .dropdown-item.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .current-section {
+            background: #e8f4fd;
+            padding: 0.75rem 1rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-left: 4px solid #3498db;
+        }
+
+        /* Estilos originais do tutorial */
+        .cms {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .cms li {
+            margin-bottom: 0.5rem;
+        }
+
+        .step-card {
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease;
+            border: none;
+        }
+
+        .step-card:hover {
+            transform: scale(1.02);
+        }
+
+        .img-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .img-container p {
+            font-style: italic;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+
+        .feature-card {
+            border-left: 4px solid #0d52b7;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .note {
+            background-color: #f8f9fa;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        span.vermelho {
+            color: #f00;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        /* Botão Scroll Up */
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scroll-top-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4);
+        }
+
+        .scroll-top-btn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .dropdown-nav {
+                flex-direction: column;
+            }
+
+            .dropdown-nav .dropdown {
+                min-width: 100%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .scroll-top-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+        }
+
+        .section-content {
+            display: none;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <!-- Botão Scroll Up -->
+        <button id="scrollTopBtn" class="scroll-top-btn" title="Voltar ao topo">
+            <i class="bi bi-arrow-up-circle"></i>
+        </button>
+
+        <header>
+            <div class="header-content">
+                <h1>🖥️ Sistema ICODE</h1>
+                <p class="subtitle">Tutorial para Editores - Guia completo para utilizar o sistema</p>
+            </div>
+        </header>
+
+        <!-- ===== MENU DROPDOWN ===== -->
+        <div class="dropdown-nav">
+            <!-- Botão SOBRE O SISTEMA -->
+            <div class="dropdown">
+                <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-info-circle me-2"></i>Sobre o Sistema
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" onclick="showSection('o-que-e-o-sistema-icode')">
+                        <i class="bi bi-question-circle"></i>O que é o Sistema ICODE?
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('acesso-ao-sistema')">
+                        <i class="bi bi-key"></i>Acesso ao Sistema
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('perfil-do-usuario')">
+                        <i class="bi bi-person"></i>Perfil do Usuário
+                    </a></li>
+                </ul>
+            </div>
+
+            <!-- Botão PÁGINAS E RECURSOS -->
+            <div class="dropdown">
+                <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-layout-text-window me-2"></i>Páginas e Recursos
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" onclick="showSection('painel-inicial')">
+                        <i class="bi bi-layout-text-sidebar"></i>Página Inicial
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('calendarios')">
+                        <i class="bi bi-calendar"></i>Página Calendários
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('pessoas')">
+                        <i class="bi bi-people"></i>Página Pessoas
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('financeiro')">
+                        <i class="bi bi-graph-up"></i>Página Financeiro
+                    </a></li>                    
+                    <li><a class="dropdown-item" href="#" onclick="showSection('sobre-o-sistema')">
+                        <i class="bi bi-info-circle"></i>Página Sobre
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('conteudo-dos-colegiados')">
+                        <i class="bi bi-building"></i>Conteúdo dos Colegiados
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('navegando-pelos-documentos')">
+                        <i class="bi bi-folder"></i>Navegando pelos Documentos
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('detalhes-da-reuniao')">
+                        <i class="bi bi-file-text"></i>Detalhes da Reunião
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('navegacao-por-diretorios')">
+                        <i class="bi bi-folder2-open"></i>Navegação por Diretórios
+                    </a></li>
+                </ul>
+            </div>
+
+            <!-- Botão EDIÇÃO -->
+            <div class="dropdown">
+                <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-pencil-square me-2"></i>Edição
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" onclick="showSection('criacao-de-novos-posts')">
+                        <i class="bi bi-plus-circle"></i>Criação de Novos Posts
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('upload-de-anexos')">
+                        <i class="bi bi-cloud-upload"></i>Upload de Anexos
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('inclusao-links')">
+                        <i class="bi bi-file-earmark-pdf"></i>Inclusão de PDFs no Post
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('exportacao')">
+                        <i class="bi bi-file-earmark-arrow-down"></i>Exportação de PDF
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('indexacao')">
+                        <i class="bi bi-database"></i>Indexação no Banco de Dados
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('conversao')">
+                        <i class="bi bi-file-earmark-word"></i>Conversão DOC 2 PDF
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('correcao')">
+                        <i class="bi bi-link-45deg"></i>Correção de Links no Post
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSection('compartilhar-reuniao')">
+                        <i class="bi bi-share"></i>Compartilhar Reunião
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Indicador da seção atual -->
+        <div class="current-section">
+            <i class="bi bi-eye"></i>
+            <span id="currentSection">Visualizando: O que é o Sistema ICODE?</span>
+        </div>
+
+        <!-- ===== CONTEÚDO DO TUTORIAL ===== -->
+        <div class="content-area">
+            <!-- Seção: O que é o Sistema ICODE? -->
+            <section id="o-que-e-o-sistema-icode" class="section-content active">
+                <h2 class="mb-4">O que é o Sistema ICODE?</h2>
+                <p>O Sistema ICODE é um gerenciador de conteúdos dos colegiados do IC, incluindo:</p>
+                <ul>
+                    <li>Congregação</li>
+                    <li>Conselho Interdepartamental (CI)</li>
+                    <li>Departamento de Sistema de Computação (DSC)</li>
+                    <li>Departamento de Sistemas de Informação (DSI)</li>
+                    <li>Departamento de Teoria de Computação (DTC)</li>
+                    <li>Comissão Diretora de Informática (CDI)</li>
+                </ul>
+
+                <div class="feature-card">
+                    <p>O ICODE é um <b>CMS</b> (Sistema Gerenciador de Conteúdo) construído com tecnologias modernas:</p>
+                    <ul class="cms">
+                        <li><a target="_blank" href="https://www.php.net/"><i class="bi bi-filetype-php"></i>&ensp;PHP 8</a></li>
+                        <li><a target="_blank" href="https://wordpress.com/"><i class="bi bi-wordpress"></i>&ensp;WordPress 6</a></li>
+                        <li><a target="_blank" href="https://getbootstrap.com/"><i class="bi bi-bootstrap"></i>&ensp;Bootstrap 5</a></li>
+                        <li><a target="_blank" href="https://react.dev/"><i class="bi bi-filetype-jsx"></i>&ensp;React</a></li>
+                        <li><a target="_blank" href="https://ckeditor.com/"><i class="bi bi-file-earmark-text"></i>&ensp;CKEditor</a> (editor html)</li>
+                        <li><a target="_blank" href="https://studio-42.github.io/elFinder/#elf_l1_Lw"><i class="bi bi-archive"></i>&ensp;elFinder</a> (gerenciador de arquivos)</li>
+                        <li><a target="_blank" href="https://pdfparser.io/"><i class="bi bi-file-earmark-pdf"></i>&ensp;PDFParser</a> (conversor pdf2txt)</li>
+                        <li><a target="_blank" href="https://ghostscript.com/"><i class="fa fa-snapchat-ghost"></i>&ensp;Ghostscript</a> (compactador de pdf)</li>
+                        <li><a target="_blank" href="https://pt-br.libreoffice.org/"><i class="bi bi-file-earmark-word"></i>&ensp;sOffice</a> (conversor word2pdf)</li>
+                        <li><a target="_blank" href="https://gemini.google.com/app/"><i class="bi bi-star-fill"></i>&ensp;Gemini AI</a></li>
+                    </ul>
+                </div>
+
+                <p>Os principais objetivos desta nova versão são:</p>
+                <ol>
+                    <li>Modernizar a interface do sistema</li>
+                    <li>Melhorar significativamente a experiência do usuário</li>
+                    <li>Solucionar problemas de links quebrados de documentos anexados</li>
+                    <li>Facilitar o acesso e gerenciamento de documentos institucionais</li>
+                    <li>Aprimorar a indexação de documentos PDF</li>
+                    <li>Integrar IA para pesquisa de documentos</li>
+                    <li>Simplificar o código fonte</li>
+                </ol>
+            </section>
+
+            <!-- Seção: Acesso ao Sistema -->
+            <section id="acesso-ao-sistema" class="section-content">
+                <h2 class="mb-4">Acesso ao Sistema</h2>
+                <p>O acesso ao ICODE é restrito e requer autenticação. O usuário pode fazer login utilizando:</p>
+                <ul>
+                    <li>Contas Unicamp ou DAC (Utilizando o sistema SISE de autenticação central)</li>
+                    <li>Conta IC (Através do LDAP interno)</li>
+                </ul>
+
+                <div class="img-container">
+                    <img src="img/imagem1.png" alt="Tela de login do sistema ICODE" class="img-fluid">
+                    <p>Figura 1: Tela de login do sistema ICODE</p>
+                </div>
+            </section>
+
+            <!-- Seção: Perfil do Usuário -->
+            <section id="perfil-do-usuario" class="section-content">
+                <h2 class="mb-4">Perfil do Usuário</h2>
+                <p>Após o login, o usuário será redirecionado para a página de perfil, que contém:</p>
+                <ul>
+                    <li><b>Nome</b></li>
+                    <li><b>Sobrenome</b></li>
+                    <li><b>E-Mail</b></li>
+                    <li><b>Papel</b> (assinante, editor ou administrador)</li>
+                    <li><b>Membro</b> (Qual colegiado o usuário tem acesso ao conteúdo, podendo ser: congrega, ci, dsc, dsc, dsi e cdi)
+                        <ul>
+                            <li><b>Subcategoria Membro de Posts Privados</b> (Acesso a posts privados ainda não publicados de determinados colegiados)</li>
+                            <li><b>Subcategoria Membro de Arquivos Privados</b> (Acesso a arquivos privados de determinados colegiados)</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="feature-card">
+                    <h5>Atribuição Automática de Permissões</h5>
+                    <p>O sistema é totalmente automatizado - ao fazer login, o usuário é automaticamente designado para:</p>
+                    <ul>
+                        <li>Um papel específico</li>
+                        <li>Colegiados os quais o acesso é liberado, de acordo com sua função e cadastro na <a target="_blank" href="https://intranet.ic.unicamp.br">intranet.ic.unicamp.br</a></li>
+                    </ul>
+                </div>
+
+                <p>Todos os usuários têm acesso às páginas públicas da <b>Congregação</b> e <b>CI</b>, presentes no menu lateral esquerdo e superior, assim como os demais colegiados os quais o usuário tem permissão de acesso.</p>
+
+                <div class="note">
+                    <p><strong>Editores e Administradores</strong>, que são pré-cadastrados no sistema, têm acesso a todos os conteúdos dos colegiados e funcionalidades avançadas.</p>
+                </div>
+
+                <div class="img-container">
+                    <img src="img/imagem2.png" alt="Página de perfil e menu lateral" class="img-fluid">
+                    <p>Figura 2: Página de perfil e menu lateral</p>
+                </div>
+            </section>
+
+            <!-- Seção: Página Inicial -->
+            <section id="painel-inicial" class="section-content">
+                <h2 class="mb-4">Página Inicial</h2>
+                <p>A página inicial do ICODE oferece o recurso de Busca Avançada, que realiza pesquisa de termos em 
+                    todos os posts e PDFs que o usuário tenha acesso, exibe também todas as últimas publicações no sistema, permitindo 
+                    que o usuário acompanhe as atualizações mais recentes, além de uma AI para interação.</p>
+
+                <div class="img-container">
+                    <img src="img/imagem3.png" alt="Recurso de Busca Avançada (Todo o ICODE)" class="img-fluid">
+                    <p>Figura 3: Recurso de Busca Avançada em todo o Sistema</p>
+                </div>
+
+                <div class="img-container">
+                    <img src="img/imagem4.png" alt="Recurso de Busca por IA" class="img-fluid">
+                    <p>Figura 4: Recurso de Busca Avançada com IA</p>
+                </div>
+            </section>
+
+            <!-- Seção: Calendários -->
+            <section id="calendarios" class="section-content">
+                <h2 class="mb-4">Calendários</h2>
+                <p>No item de menu <strong>Calendários</strong>, o usuário encontra os calendários de reuniões dos colegiados, que é atualizada automaticamente via intranet.</p>
+                
+                <div class="img-container">
+                    <img src="img/imagem5.png" alt="Calendários" class="img-fluid">
+                    <p>Figura 5: Calendários</p>
+                </div>
+            </section>
+
+            <!-- Seção: Pessoas -->
+            <section id="pessoas" class="section-content">
+                <h2 class="mb-4">Pessoas</h2>
+                <p>No item de menu <strong>Pessoas</strong>, o usuário encontra a lista de docentes e funcionários do IC, que também é atualizada pela intranet.</p>
+                <div class="img-container">
+                    <img src="img/imagem6.png" alt="Lista de usuários" class="img-fluid">
+                    <p>Figura 6: Lista de usuários</p>
+                </div>
+            </section>
+
+            <!-- Seção: Financeiro -->
+            <section id="financeiro" class="section-content">
+                <h2 class="mb-4">Financeiro</h2>
+                <p>O item de menu <strong>Financeiro</strong> do menu, são exibidos os dados EDAT..</p>
+                <div class="img-container">
+                    <img src="img/imagem7.png" alt="Página Financeiro" class="img-fluid">
+                    <p>Figura 7: Página Financeiro</p>
+                </div>
+            </section>            
+
+            <!-- Seção: Página Sobre -->
+            <section id="sobre-o-sistema" class="section-content">
+                <h2 class="mb-4">Página Sobre</h2>
+                <p>Contém informações úteis sobre o sistema ICODE:</p>
+                <ul>
+                    <li>Este tutorial</li>
+                    <li>Projeto no GitLab</li>
+                    <li>Site do desenvolvedor</li>
+                    <li>Páginas mais acessadas</li>
+                    <li>Registro de acessos por usuário/IP (somente para editores e administradores)</li>
+                </ul>
+                <div class="img-container">
+                    <img src="img/imagem8.png" alt="Página Sobre" class="img-fluid">
+                    <p>Figura 8: Página Sobre</p>
+                </div>
+            </section>
+
+            <!-- Seção: Conteúdo dos Colegiados -->
+            <section id="conteudo-dos-colegiados" class="section-content">
+                <h2 class="mb-4">Conteúdo dos Colegiados</h2>
+                <p>Cada colegiado que o usuário tem acesso possui duas seções, organizadas em cards dentro de seu conteúdo. </p>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card step-card mb-6">
+                            <div class="card-body">
+                                <h5 class="card-title">1. Documentos</h5>
+                                <p class="card-text">Mostra os documentos ordenados por ano.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card step-card mb-6">
+                            <div class="card-body">
+                                <h5 class="card-title">2. Membros</h5>
+                                <p class="card-text">Apresenta os membros do colegiado.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="img-container mt-4">
+                    <img src="img/imagem9.png" alt="Estrutura de conteúdo dos colegiados" class="img-fluid">
+                    <p>Figura 9: Estrutura de conteúdo dos colegiados</p>
+                </div>
+            </section>
+
+            <!-- Seção: Navegando pelos Documentos -->
+            <section id="navegando-pelos-documentos" class="section-content">
+                <h2 class="mb-4">Navegando pelos Documentos</h2>
+                <p>Ao selecionar um ano específico, o usuário visualizará todas as publicações daquele período, organizadas em:</p>
+                <ul>
+                    <li><strong>Título da Reunião:</strong> Link para a publicação (post)</li>
+                    <li><strong>Anexos:</strong> Link para o diretório dos arquivos da reunião no servidor</li>
+                    <li><strong>Data:</strong> Quando a reunião foi realizada</li>               
+                </ul>
+
+                <div class="img-container">
+                    <img src="img/imagem10.png" alt="Visualização de documentos por ano" class="img-fluid">
+                    <p>Figura 10: Visualização de documentos por ano</p>
+                </div>
+
+                <div class="note">
+                    <p><strong>Observação:</strong> Editores e Administradores também verão <span class="vermelho"><i
+                                class='bi bi-file-earmark-lock2'></i>&nbsp;</span><b>Post Privados</b> e os botões
+                        '<b>Novo Post</b>' e '<b>Indexar PDFs</b>'.</p>
+                </div>
+            </section>
+
+            <!-- Seção: Detalhes da Reunião -->
+            <section id="detalhes-da-reuniao" class="section-content">
+                <h2 class="mb-4">Detalhes da Reunião</h2>
+                <p>Ao clicar em qualquer link de reunião, o post completo será exibido, contendo:</p>
+                <ul>
+                    <li><b>Título</b></li>
+                    <li><b>Data de realização</b></li>
+                    <li><b>Membros</b></li>
+                    <li><b>Conteúdo descritivo</b></li>
+                    <li><b>Anexos</b>, organizados em:
+                        <ul>
+                            <li><b>Pautas</b> (público)</li>
+                            <li><b>Deliberações</b> (público)</li>
+                            <li><b>Ata</b> (público)</li>
+                            <li><b>Itens</b> (privado) [necessário permissão especial para visualizar]</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="img-container">
+                    <img src="img/imagem11.png" alt="Detalhes de uma reunião" class="img-fluid">
+                    <p>Figura 11: Detalhes de uma reunião</p>
+                </div>
+
+                <div class="note">
+                    <p><strong>Observação:</strong> Editores e Administradores visualizarão também os botões
+                        '<b>Compartilhar</b>', '<b>Editar</b>' e
+                        '<b>Apagar</b>', para gerenciamento do conteúdo.</p>
+                </div>
+            </section>
+
+            <!-- Seção: Navegação por Diretórios -->
+            <section id="navegacao-por-diretorios" class="section-content">
+                <h2 class="mb-4">Navegação por Diretórios</h2>
+                <p>Nesta nova versão do ICODE, além de visualizar os anexos no post, o usuário também pode:</p>
+                <ul>
+                    <li>Acessar os arquivos diretamente nos seus respectivos diretórios</li>
+                    <li>Abrir os documentos para leitura</li>
+                </ul>
+
+                <div class="img-container">
+                    <img src="img/imagem12.png" alt="Navegação por Diretórios" class="img-fluid">
+                    <p>Figura 12: Navegação por Diretórios</p>
+                </div>
+
+                <div class="feature-card">
+                    <h5>Migração Completa</h5>
+                    <p><strong>TODOS</strong> os documentos antigos de anos anteriores foram migrados para o Novo ICODE.
+                        Agora o usuário tem a liberdade para acessar qualquer arquivo histórico sem a necessidade de
+                        contatar a
+                        equipe de TI.</p>
+                    <p>Os arquivos estão organizados na estrutura: <code>/tipo/ano/post_id/</code></p>
+                </div>
+
+                <div class="img-container">
+                    <img src="img/imagem13.png" alt="Histórico de Arquivos" class="img-fluid">
+                    <p>Figura 13: Histórico de Arquivos</p>
+                </div>
+            </section>
+
+            <!-- Seção: Criação de Novos Posts -->
+            <section id="criacao-de-novos-posts" class="section-content">
+                <h2 class="mb-4">Criar/Editar Posts</h2>
+                <p>Criar ou editar um post no ICODE é um processo simples e intuitivo:</p>
+                <ol>
+                    <li>Clique no botão 'Novo Post' ou 'Editar' (disponível para Editores e Administradores)</li>
+                    <li>Preencha os campos solicitados
+                        <ul>
+                            <li><b>Título</b></li>
+                            <li><b>Data</b></li>
+                            <li><b>Privado</b> (Se o post é Privado)</li>
+                            <li><b>Link Permanente</b> (preenchimento automático baseado no Título, porém editável)</li>
+                            <li><b>Membros</b> (preenchidos automaticamente via Intranet, porém editável)</li>
+                            <li><b>Conteúdo</b> da Reunião (editável com <a title="Editor wysiwyg" target="_blank"
+                                    href="https://ckeditor.com/">CKeditor</a>)</li>
+                        </ul>
+                    </li>
+                    <li>Salve o post</li>
+                    <li>Após salvar, o usuário poderá fazer upload dos anexos</li>
+                </ol>
+
+                <div class="img-container">
+                    <img src="img/imagem14.png" alt="Criação de um novo post" class="img-fluid">
+                    <p>Figura 14: Criação de um novo post</p>
+                </div>
+            </section>
+
+            <!-- Seção: Upload de Anexos -->
+            <section id="upload-de-anexos" class="section-content">
+                <h2 class="mb-4">Upload de Anexos</h2>
+                <p>Agora o ICODE conta com um potente gerenciador de arquivos: o <a title="Gerenciador de Arquivos elFinder"
+                        target="_blank" href="https://studio-42.github.io/elFinder/#elf_l1_Lw/">elFinder</a></p>
+
+                <div class="feature-card">
+                    <p>
+                        O <b>elFinder</b> é um gerenciador de arquivos open-source baseado em navegador, desenvolvido em
+                        JavaScript com jQuery, que fornece uma interface semelhante à de sistemas operacionais para
+                        manipulação
+                        de arquivos e diretórios. Inspirado no Finder do macOS, o elFinder permite aos usuários realizar
+                        operações comuns como <b>upload, download, copiar, mover, renomear, excluir e pré-visualizar
+                            arquivos</b>, tudo de forma interativa e intuitiva.
+                    </p>
+                </div>
+
+                <p>Para enviar anexos:</p>
+                <ol>
+                    <li>Clique no botão 'Floppy' <i class="fa fa-floppy-o"></i></li>
+                    <li>Selecione arquivos para Upload</li>
+                    <li>Clique em Abrir/Enviar</li>
+                </ol>
+
+                <div class="feature-card">
+                    <h5><b>Organização</b></h5>
+                    <p>O sistema de arquivos está organizado seguindo a estrutura:</p>
+                    <p><code>/ tipo / ano / id do post / subdiretorio / documento.pdf</code></p>
+                    <p>Onde <i>tipo</i> pode ser <b>congrega, ci, dsc, dsi, dtc ou cdi</b> e <i>subdiretorio</i> pode ser
+                        <b>ata, deliberacoes, pautas ou privado</b>. <br><br>
+                        <i class="bi bi-lightbulb"></i> Esta abordagem elimina completamente problemas de links quebrados,
+                        pois cada post é "dono" de um único diretório exclusivo, identificado pelo seu <b>id</b>.
+                    </p>
+                </div>
+
+                <div class="img-container">
+                    <img src="img/imagem15.png" alt="Upload de anexos" class="img-fluid">
+                    <p>Figura 15: Upload de anexos</p>
+                </div>
+            </section>
+
+            <!-- Seção: Inclusão de PDFs no Post -->
+            <section id="inclusao-links" class="section-content">
+                <h2 class="mb-4">Inclusão de PDFs no Post</h2>
+                <div class="feature-card">
+                    <p>No Editor do ICODE agora existe o recurso de Inclusão de PDFs no Conteúdo, para isso clique
+                        no botão <i class="bi bi-file-earmark-pdf"></i> <b>Inserir PDF no Post</b>, escolha o arquivo e dê
+                        duplo clique para inseri-lo no texto.</p>
+                </div>
+                <div class="img-container">
+                    <img src="img/imagem16.png" alt="Upload de anexos" class="img-fluid">
+                    <p>Figura 16: Inclusão de PDFs no Post</p>
+                </div>
+            </section>
+
+            <!-- Seção: Exportação de PDF -->
+            <section id="exportacao" class="section-content">
+                <h2 class="mb-4">Exportação de PDF</h2>
+                <div class="feature-card">
+                    <p>Junção e Exportação de documentos: Selecione os documentos que deseja unir e clique no
+                        botão <i class="bi bi-file-earmark-text"></i> <b>Juntar PDFs</b>, o arquivo resultante
+                        é salvo no subdiretório 'privado'.
+                    </p>
+                </div>
+                <div class="img-container">
+                    <img src="img/imagem17.png" alt="Upload de anexos" class="img-fluid">
+                    <p>Figura 17: Exportação de anexos</p>
+                </div>
+            </section>
+
+            <!-- Seção: Indexação no Banco de Dados -->
+            <section id="indexacao" class="section-content">
+                <h2 class="mb-4">Indexação no Banco de Dados</h2>
+                <div class="feature-card">
+                    <p>
+                        O <b>ICODE</b> agora possui um sistema próprio de <b>Indexação de PDFs</b>, totalmente integrado ao sistema.
+                        Isso significa que não é mais necessário o uso do plugin "WP Fulltext Search Pro", garantindo mais estabilidade e desempenho.
+                    </p>
+                    <p>
+                        A <b>indexação</b> serve para que o conteúdo dos PDFs seja convertido em texto e armazenado no banco de dados.
+                        Dessa forma, o sistema de <b>busca</b> e a <b>IA</b> do ICODE conseguem encontrar informações dentro dos arquivos PDF.
+                    </p>
+                    <p>
+                        O processo é opcional e pode ser feito a qualquer momento — durante a criação dos posts ou periodicamente (por mês ou por ano).
+                    </p>
+                    <p>
+                        Para fazer a indexação, clique no botão amarelo <b>Indexar PDFs</b> ou, no gerenciador de arquivos <b>elFinder</b>,
+                        selecione os documentos desejados e clique no ícone <i class="bi bi-database"></i> <b>Indexar PDFs</b>.
+                        Os arquivos serão processados automaticamente pelo conversor <b>pdf2txt</b>, e o texto extraído ficará disponível para busca no sistema e na IA.
+                    </p>
+                </div>
+
+                <div class="img-container">
+                    <img src="img/imagem18.png" alt="Indexação de todos os anexos do ano" class="img-fluid">
+                    <p>Figura 18: Indexação de todos os anexos do ano</p>
+                </div>
+
+                <div class="img-container">
+                    <img src="img/imagem19.png" alt="Indexação de anexos individualmente" class="img-fluid">
+                    <p>Figura 19: Indexação de anexos individualmente</p>
+                </div>
+            </section>
+
+            <!-- Seção: Conversão DOC 2 PDF -->
+            <section id="conversao" class="section-content">
+                <h2 class="mb-4">Conversão DOC 2 PDF</h2>
+                <div class="feature-card">
+                    <p>O ICODE agora também conta com a Conversão de Documentos para PDFs.
+                        Selecione os documentos que deseja converter e clique no botão
+                        <i class="bi bi-file-earmark-text"></i> <b>Converter Word para PDF</b>, os arquivo serão convertidos
+                        e salvos no diretório 'privados'.
+                    </p>
+                </div>
+                <div class="img-container">
+                    <img src="img/imagem20.png" alt="Conversão de anexos" class="img-fluid">
+                    <p>Figura 20: Conversão de anexos</p>
+                </div>
+            </section>
+
+            <!-- Seção: Correção de Links no Post -->
+            <section id="correcao" class="section-content">
+                <h2 class="mb-4">Correção de Links no Post</h2>
+                <div class="feature-card">
+                    <p>Ao mover arquivos de um diretório para outro é necessário refazer os links dos anexos no post, para
+                        isso o ICODE traz
+                        uma nova função: Correção de links; clique no botão <i class="bi bi-gear"></i> <b>Corrigir links de
+                            arquivos</b>,
+                        os links de anexos no corpo do Post serão corrigidos automaticamente.</p>
+                </div>
+                <div class="img-container">
+                    <img src="img/imagem21.png" alt="Corrigindo links de arquivos" class="img-fluid">
+                    <p>Figura 21: Corrigindo links de arquivos</p>
+                </div>
+            </section>
+
+            <!-- Seção: Compartilhar Reunião -->
+            <section id="compartilhar-reuniao" class="section-content">
+                <h2 class="mb-4">Compartilhar Reunião</h2>
+                <p>Nesta nova versão do ICODE o usuário editor ou administrador pode compartilhar a reunião por e-mail.</p>
+                <ul>
+                    <li>Preencha os campos necessários para enviar o e-mail.</li>
+                    <li>Edite o campo Descrição conforme necessidade.</li>
+                    <li>Clique em Enviar.</li>
+                </ul>
+
+                <div class="img-container">
+                    <img src="img/imagem22.png" alt="Compartilhar Reunião" class="img-fluid">
+                    <p>Figura 22: Compartilhar Reunião</p>
+                </div>
+            </section>
+
+            <!-- Seção: Suporte -->
+            <section id="suporte" class="section-content">
+                <div class="alert alert-info">
+                    <h4 class="alert-heading">Suporte</h4>
+                    <p>Em caso de dúvidas ou problemas, entre em contato com o suporte através do e-mail:</p>
+                    <p class="mb-0">
+                        <a href="mailto:suporte@ic.unicamp.br" class="alert-link">suporte@ic.unicamp.br</a>
+                    </p>
+                </div>
+            </section>
+        
+        </div>
+    </div>
+
+    <footer class="mt-5">
+        <div class="container">
+            <p class="mb-0">Sistema ICODE &copy; 2025 - Instituto de Computação - UNICAMP</p>
+            <p class="mb-0">Em caso de dúvidas ou problemas, entre em contato com o suporte: 
+                <a href="mailto:suporte@ic.unicamp.br">suporte@ic.unicamp.br</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Função para mostrar uma seção específica
+        function showSection(sectionId) {
+            // Oculta todas as seções
+            const sections = document.querySelectorAll('.section-content');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostra a seção selecionada
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                
+                // Atualiza o indicador de seção atual
+                updateCurrentSection(targetSection.querySelector('h2').textContent);
+                
+                // Rola para a seção
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Função para atualizar o indicador de seção atual
+        function updateCurrentSection(sectionName) {
+            const indicator = document.getElementById('currentSection');
+            if (indicator) {
+                indicator.textContent = `Visualizando: ${sectionName}`;
+            }
+        }
+
+        // Inicializa o indicador com a primeira seção
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentSection('O que é o Sistema ICODE?');
+            
+            // Fecha dropdowns após seleção
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Pequeno delay para dar tempo da seção mudar antes de fechar o dropdown
+                    setTimeout(() => {
+                        const dropdown = this.closest('.dropdown');
+                        const dropdownInstance = bootstrap.Dropdown.getInstance(dropdown.querySelector('.dropdown-toggle'));
+                        if (dropdownInstance) {
+                            dropdownInstance.hide();
+                        }
+                    }, 100);
+                });
+            });
+        });
+
+        // Botão Scroll Up
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+        // Mostrar/ocultar botão baseado no scroll
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        // Scroll instantâneo com transição suave
+        scrollTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Evita listagem de diretórios
+Options -Indexes
+
+# Bloqueia scripts PHP (caso alguém tente subir maliciosamente)
+<FilesMatch "\.(php|php5|phtml)$">
+    Deny from all
+</FilesMatch>

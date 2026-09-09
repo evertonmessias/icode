@@ -1,17 +1,68 @@
+# novo-icode
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Bloqueia o acesso ao debug.log para não autenticados
+    RewriteCond %{REQUEST_URI} ^/wp-content/debug\.log$ [NC]
+    RewriteCond %{HTTP_COOKIE} !wordpress_logged_in_ [NC]
+    RewriteRule ^.* - [F,L]
+
+    # Bloqueia acesso ao diretório .git e seus conteúdos
+    RewriteRule ^\.git - [F,L,NC]
+
+    # Bloqueia acesso a arquivos sensíveis (retorna 403 Forbidden)
+    <FilesMatch "^(commitar\.sh|\.gitignore|\.gitattributes|\.env|composer\.json|composer\.lock)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+# Caso o mod_rewrite esteja desativado, reforço adicional
+<IfModule !mod_rewrite.c>
+    <DirectoryMatch "^.*/\.git/">
+        Require all denied
+    </DirectoryMatch>
+    <FilesMatch "^(commitar\.sh|\.gitignore|\.gitattributes|\.env|composer\.json|composer\.lock)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+# Mantém sua regra de CSP
+RewriteEngine On
+RewriteRule ^csp-report/?$ - [L]
 
 # BEGIN WordPress
+# As diretrizes (linhas) entre "BEGIN WordPress" e "END WordPress" são
+# geradas dinamicamente e só devem ser modificadas através de filtros do WordPress.
+# Quaisquer alterações nas diretivas entre esses marcadores serão sobrescritas.
+<IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteBase /
 RewriteRule ^index\.php$ - [L]
-
-# add a trailing slash to /wp-admin
-RewriteRule ^([_0-9a-zA-Z-]+/)?wp-admin$ $1wp-admin/ [R=301,L]
-
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^ - [L]
-RewriteRule ^([_0-9a-zA-Z-]+/)?(wp-(content|admin|includes).*) $2 [L]
-RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
-RewriteRule . index.php [L]
+# RewriteRule ^^login$ /wp-login.php [QSA,L]
+RewriteRule ^^logout$ /wp-login.php?action=logout [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
 # END WordPress
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^wp-content/uploads/(.*\.pdf)$ /file.php?file=$1 [QSA,L,NE,B]
+</IfModule>
+
+# Adicionando o tipo MIME para arquivos .js
+AddType application/javascript .js
+
+# Desabilitando o cabeçalho X-Content-Type-Options
+Header unset X-Content-Type-Options
+
+# Forçando o tipo MIME para arquivos .js (especificamente para o TinyMCE)
+<IfModule mod_headers.c>
+    <FilesMatch "\.js$">
+        Header set Content-Type "application/javascript"
+    </FilesMatch>
+</IfModule>
