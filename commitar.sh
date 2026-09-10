@@ -1,4 +1,5 @@
 #!/bin/bash
+# Commitar
 git pull
 git add .
 data=`date +%d-%m-%Y_%H:%M:%S`
